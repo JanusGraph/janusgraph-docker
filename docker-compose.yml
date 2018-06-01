@@ -1,0 +1,13 @@
+version: "3"
+
+services:
+  janusgraph:
+    image: experoinc/janusgraph:0.2.0
+    container_name: janusgraph-default
+    ports:
+      - "8182:8182"
+    volumes:
+      - "janusgraph-default-data:/var/lib/janusgraph"
+
+volumes:
+  janusgraph-default-data:
