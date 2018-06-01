@@ -1,0 +1,17 @@
+version: "3"
+
+services:
+  janusgraph:
+    image: experoinc/janusgraph:0.2.0
+    container_name: janusgraph-mount
+    ports:
+      - "8182:8182"
+    volumes:
+      # named volume mounts
+      - "janusgraph-mount-data:/var/lib/janusgraph"
+      # bind mounts for configs; use read only so not overridden by environment variables
+      - "./example-config:/etc/opt/janusgraph/:ro"
+
+# use a named volume to maintain database data between restarts
+volumes:
+  janusgraph-mount-data:
