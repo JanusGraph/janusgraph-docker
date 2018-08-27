@@ -1,0 +1,26 @@
+# This is the official list of people who have contributed to JanusGraph Python
+# driver.
+#
+# The AUTHORS.txt file lists the copyright holders; this file lists people. For
+# example, employees of an organization who assign copyright to their
+# organization are listed here but not in AUTHORS.txt, because their
+# organization holds the copyright. Similarly, contributors who assigned
+# copyright to a party other than their employer will appear in this list, but
+# not in AUTHORS.txt file.
+#
+# When adding J Random Contributor's name to this file, either J's name or J's
+# organization's name should be added to the AUTHORS.txt file, depending on
+# whether the individual or corporate CLA was used.
+
+# The original list was generated via:
+#
+#     $ git log --all --format='%aN <%cE>' | sort -u --ignore-case
+#
+# and manual cleanup.
+
+# Names should be added to this file like so:
+#     Individual's name <email1>
+#     Individual's name <email1> <email2> <emailN>
+
+# Please keep the list sorted.
+
