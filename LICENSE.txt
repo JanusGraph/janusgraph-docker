@@ -6,7 +6,7 @@ The JanusGraph project uses the following two licenses:
   which can be found in the file CC-BY-4.0.txt in the root of this repository,
   and included below
 
-The JanusGraph Python driver is distributed under the following licenses:
+The JanusGraph Docker images are distributed under the following licenses:
 
 * APACHE-2.0 license for code contributions, including code samples in docs
 * CC-BY-4.0 license for documentation contributions
@@ -205,7 +205,7 @@ For convenience, copies of APACHE-2.0 and CC-BY-4.0 are included verbatim below.
       same "printed page" as the copyright notice for easier
       identification within third-party archives.
 
-   Copyright 2012-2013 Aurelius LLC
+   Copyright 2018 JanusGraph Docker Authors
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.

@@ -1,5 +1,5 @@
-# This is the official list of people who have contributed to JanusGraph Python
-# driver.
+# This is the official list of people who have contributed to JanusGraph Docker
+# images.
 #
 # The AUTHORS.txt file lists the copyright holders; this file lists people. For
 # example, employees of an organization who assign copyright to their
