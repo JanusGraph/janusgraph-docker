@@ -8,7 +8,7 @@ latest_version=${versions[${#versions[@]}-1]}
 
 for v in ${versions};
 do
-  docker build -f "${v}/Dockerfile" -t "experoinc/janusgraph:${v}" ${v}
+  docker build -f "${v}/Dockerfile" -t "janusgraph/janusgraph:${v}" ${v}
 done
 
-docker tag "experoinc/janusgraph:${latest_version}" "experoinc/janusgraph:latest"
+docker tag "janusgraph/janusgraph:${latest_version}" "janusgraph/janusgraph:latest"

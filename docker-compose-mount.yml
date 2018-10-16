@@ -2,12 +2,12 @@ version: "3"
 
 services:
   janusgraph:
-    image: experoinc/janusgraph:0.2.0
+    image: janusgraph/janusgraph:0.2.0
     container_name: janusgraph-mount
     ports:
       - "8182:8182"
     volumes:
-      # named volume mounts
+      # Named volume mounts. The data mount is only used when BerkeleyDB is used for storage.
       - "janusgraph-mount-data:/var/lib/janusgraph"
       # bind mounts for configs; use read only so not overridden by environment variables
       - "./example-config:/etc/opt/janusgraph/:ro"

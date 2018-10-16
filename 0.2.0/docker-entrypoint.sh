@@ -29,7 +29,7 @@ write_prop() {
 
   # if the line exists in the file replace it; otherwise append it
   if [ "${val}X" != "X" ]; then
-    if grep -q -E "^${key}=.*" ${JANUS_PROPS}; then
+    if grep -q -E "^${key}\s*=.*" ${JANUS_PROPS}; then
       sed -ri "s/^(${key}=).*/\\1${val}/" ${JANUS_PROPS}
     else
       echo "${key}=${val}" >> ${JANUS_PROPS}

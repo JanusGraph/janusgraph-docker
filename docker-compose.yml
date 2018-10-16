@@ -2,10 +2,11 @@ version: "3"
 
 services:
   janusgraph:
-    image: experoinc/janusgraph:0.2.0
+    image: janusgraph/janusgraph:0.2.0
     container_name: janusgraph-default
     ports:
       - "8182:8182"
+    # The mounted volume only makes sense if JanusGraph is being run with the BerekeleyDB storage.
     volumes:
       - "janusgraph-default-data:/var/lib/janusgraph"
 
