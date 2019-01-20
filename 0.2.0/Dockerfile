@@ -4,15 +4,13 @@ ENV JANUS_VERSION=0.2.0 \
     JANUS_HOME=/opt/janusgraph \
     JANUS_CONFIG_DIR=/etc/opt/janusgraph \
     JANUS_DATA_DIR=/var/lib/janusgraph \
-    JANUS_INDEXES="default" \
-    JANUS_INDEX_DEFAULT_BACKEND="lucene" \
-    JANUS_INDEX_DEFAULT_DIRECTORY=/var/lib/janusgraph/index \
-    JANUS_STORAGE_BACKEND=berkeleyje \
-    JANUS_STORAGE_DIRECTORY=/var/lib/janusgraph/data \
-    JANUS_GREMLIN_HOST=0.0.0.0 \
-    JANUS_GREMLIN_PORT=8182 \
-    JANUS_GREMLIN_THREADPOOLWORKER=1 \
-    JANUS_GREMLIN_GREMLINPOOL=8
+    JANUS_STORAGE_TIMEOUT=60 \
+    JANUS_PROPS_TEMPLATE=berkeleyje-lucene \
+    janusgraph.index.search.directory=/var/lib/janusgraph/index \
+    janusgraph.storage.directory=/var/lib/janusgraph/data \
+    gremlinserver.graph=/etc/opt/janusgraph/janusgraph.properties \
+    gremlinserver.threadPoolWorker=1 \
+    gremlinserver.gremlinPool=8
 
 
 RUN groupadd -r janusgraph --gid=999 && \
@@ -45,24 +43,23 @@ RUN groupadd -r janusgraph --gid=999 && \
     rm -rf ${JANUS_HOME}/javadocs && \
     rm -rf ${JANUS_HOME}/log && \
     rm -rf ${JANUS_HOME}/examples && \
-    rm -rf ${JANUS_HOME}/conf && \
-    mkdir -p ${JANUS_HOME}/conf && \
-    chown -R janusgraph:janusgraph ${JANUS_HOME} && \
-    mkdir -p ${JANUS_DATA_DIR} && \
-    mkdir -p ${JANUS_CONFIG_DIR}
+    export BERKELEYJE_LUCENE_TEMPLATE=${JANUS_HOME}/conf/gremlin-server/janusgraph-berkeleyje-lucene-server.properties && \
+    cp ${JANUS_HOME}/conf/gremlin-server/janusgraph-berkeleyje-server.properties ${BERKELEYJE_LUCENE_TEMPLATE} && \
+    echo "index.search.backend=lucene" >> ${BERKELEYJE_LUCENE_TEMPLATE} && \
+    echo "index.search.directory=db/searchindex" >> ${BERKELEYJE_LUCENE_TEMPLATE} && \
+    echo ":remote connect tinkerpop.server conf/remote.yaml" > ${JANUS_HOME}/scripts/remote-connect.groovy && \
+    echo ":> g" >> ${JANUS_HOME}/scripts/remote-connect.groovy
+
 
 COPY docker-entrypoint.sh /usr/local/bin/
-COPY janusgraph.properties ${JANUS_CONFIG_DIR}/janusgraph.properties
-COPY gremlin-server.yaml ${JANUS_CONFIG_DIR}/gremlin-server.yaml
 COPY log4j-server.properties ${JANUS_HOME}/conf/gremlin-server/log4j-server.properties
 
 RUN chmod 755 /usr/local/bin/docker-entrypoint.sh && \
-    chown -R janusgraph:janusgraph ${JANUS_DATA_DIR} && \
-    chown -R janusgraph:janusgraph ${JANUS_CONFIG_DIR} && \
-    chmod 777 ${JANUS_DATA_DIR} ${JANUS_CONFIG_DIR} && \
-    chmod -R 666 ${JANUS_CONFIG_DIR}/*
+    chown -R janusgraph:janusgraph ${JANUS_HOME}
 
 EXPOSE 8182
+
+WORKDIR ${JANUS_HOME}
 
 ENTRYPOINT [ "docker-entrypoint.sh" ]
 CMD [ "janusgraph" ]

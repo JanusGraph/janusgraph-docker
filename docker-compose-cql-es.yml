@@ -5,21 +5,19 @@ services:
     image: janusgraph/janusgraph:0.2.0
     container_name: jce-janusgraph
     environment:
-      JANUS_STORAGE_BACKEND: cql
-      JANUS_STORAGE_HOSTNAME: jce-cassandra
-      JANUS_INDEXES: search
-      JANUS_INDEX_HOSTNAME: jce-elastic
-      JANUS_GREMLIN_CHANNELIZER: org.apache.tinkerpop.gremlin.server.channel.HttpChannelizer
+      JANUS_PROPS_TEMPLATE: cassandra-es
+      janusgraph.storage.backend: cql
+      janusgraph.storage.hostname: jce-cassandra
+      janusgraph.index.search.hostname: jce-elastic
     ports:
       - "8182:8182"
     networks:
       - jce-network
     healthcheck:
-    #curl -X POST -Hcontent-type:application/json -d '{"gremlin" : "g.V().count()"}' http://localhost:8182
-      test: ["CMD", "curl", "-X", "POST", "-Hcontent-type:application/json", "-f", "-d", "{\"gremlin\" : \"g.V(1).hasNext()\" }", "http://localhost:8182"]
-      interval: 30s
-      timeout: 5s
-      retries: 1
+      test: ["CMD", "bin/gremlin.sh", "-e", "scripts/remote-connect.groovy"]
+      interval: 10s
+      timeout: 30s
+      retries: 3
   cassandra:
     image: cassandra:3
     container_name: jce-cassandra
