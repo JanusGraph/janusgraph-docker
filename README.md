@@ -1,28 +1,19 @@
 # JanusGraph Docker images
 
-## License
+This repository contains the [JanusGraph][JG] docker images.
 
-JanusGraph Docker images are provided under the [Apache 2.0
-license](APACHE-2.0.txt) and documentation is provided under the [CC-BY-4.0
-license](CC-BY-4.0.txt). For details about this dual-license structure, please
-see [`LICENSE.txt`](LICENSE.txt).
-=======
-# JanusGraph Docker Images #
+## Usage
 
-Repository for building and publishing [JanusGraph][JG] docker images.
-
-## Usage ##
-
-**Start a JanusGraph Server instance**
+### Start a JanusGraph Server instance
 
 The default configuration uses the [Oracle Berkeley DB Java Edition][JG_BDB] storage backend
 and the [Apache Lucene][JG_LUCENE] indexing backend
 
 ```bash
-$ docker run --name janusgraph-default janusgraph/janusgraph:latest
+docker run --name janusgraph-default janusgraph/janusgraph:latest
 ```
 
-**Connecting with Gremlin Console**
+### Connecting with Gremlin Console
 
 Start a JanusGraph container and connect to the `janusgraph` server remotely using Gremlin Console
 
@@ -47,27 +38,27 @@ gremlin> :> g.V().values('name')
 ==>chris
 ```
 
-**Using Docker Compose**
+### Using Docker Compose
 
 Start a JanusGraph Server instance using [docker-compose.yml](docker-compose.yml)
 
 ```bash
-$ docker-compose -f docker-compose.yml up
+docker-compose -f docker-compose.yml up
 ```
 
 Start a JanusGraph container running Gremlin Console in the same network using
 [docker-compose.yml](docker-compose.yml)
 
 ```bash
-$ docker-compose -f docker-compose.yml run --rm -e GREMLIN_REMOTE_HOSTS=janusgraph janusgraph ./bin/gremlin.sh
+docker-compose -f docker-compose.yml run --rm -e GREMLIN_REMOTE_HOSTS=janusgraph janusgraph ./bin/gremlin.sh
 ```
 
-## Configuration ##
+## Configuration
 
 The JanusGraph image provides multiple methods for configuration, including using environment
 variables to set options and using bind-mounted configuration.
 
-### Docker environment variables ###
+### Docker environment variables
 
 The environment variables supported by the JanusGraph image are summarized below.
 
@@ -79,7 +70,7 @@ The environment variables supported by the JanusGraph image are summarized below
 | JANUS_STORAGE_TIMEOUT | Timeout (seconds) used when waiting for the storage backend before starting Gremlin Server. Default value is 60 seconds. |
 | GREMLIN_REMOTE_HOSTS | Optional hostname for external Gremlin Server instance. Enables a container running Gremlin Console to connect to a remote server using `conf/remote.yaml`. |
 
-#### Properties template ####
+#### Properties template
 
 The `JANUS_PROPS_TEMPLATE` environment variable is used to define the base JanusGraph
 properties file. Values in the template properties file are used unless an alternate value
@@ -96,13 +87,13 @@ on the JanusGraph version (see [conf/gremlin-server/janusgraph*.properties][JG_T
 | cassandra-es | all |
 | cql-es | >=0.2.1 |
 
-**Example**
+##### Example: Berkeleyje-Lucene
 
 Start a JanusGraph instance using the default `berkeleyje-lucene` template with custom
 storage and server settings
 
 ```bash
-$ docker run --name janusgraph-default \
+docker run --name janusgraph-default \
     -e janusgraph.storage.berkeleyje.cache-percentage=80 \
     -e gremlinserver.threadPoolWorker=2 \
     janusgraph/janusgraph:latest
@@ -123,13 +114,13 @@ $ docker exec janusgraph-default grep threadPoolWorker /etc/opt/janusgraph/greml
 threadPoolWorker: 2
 ```
 
-**Example**
+##### Example: Cassandra-ES with Docker Compose
 
 Start a JanusGraph instance with Cassandra and Elasticsearch using the `cassandra-es`
 template through [docker-compose-cql-es.yml](docker-compose-cql-es.yml)
 
 ```bash
-$ docker-compose -f docker-compose-cql-es.yml up
+docker-compose -f docker-compose-cql-es.yml up
 ```
 
 Inspect configuration using [docker-compose-cql-es.yml](docker-compose-cql-es.yml)
@@ -150,18 +141,18 @@ storage.directory=/var/lib/janusgraph/data
 index.search.directory=/var/lib/janusgraph/index
 ```
 
-### Mounted Configuration ###
+### Mounted Configuration
 
-By default, the container stores both the janusgraph.properties and gremlin-server.yaml files
+By default, the container stores both the `janusgraph.properties` and `gremlin-server.yaml` files
 in the `JANUS_CONFIG_DIR` directory which maps to `/etc/opt/janusgraph`. When the container
 starts, it updates those files using the environment variable values. If you have a specific
-configuration and do not wish to use environment variables to configure JanusGraph, you can 
+configuration and do not wish to use environment variables to configure JanusGraph, you can
 mount a directory containing your own version of those configuration files into the container
 through a bind mount e.g. `-v /local/path/on/host:/etc/opt/janusgraph:ro`. You'll need to bind
 the files as read only however if you do not wish to have the environment variables override the 
 values in that file.
 
-**Example**
+#### Example with mounted configuration
 
 Start a JanusGraph instance with mounted configuration using [docker-compose-mount.yml](docker-compose-mount.yml)
 
@@ -171,19 +162,28 @@ janusgraph-mount | chown: changing ownership of '/etc/opt/janusgraph/janusgraph.
 ...
 ```
 
-## Development ##
+## Community
 
-### Building ###
+JanusGraph.Net uses the same communication channels as JanusGraph in general.
+So, please refer to the
+[_Community_ section in JanusGraph's main repository][JG_COMMUNITY]
+for more information about these various channels.
 
-The `build-images.sh` script will build the docker images for all the Dockerfiles in the versioned
-folder directories.
+Please use GitHub issues only to report bugs or request features.
 
-### Publishing ###
+## Contributing
 
-The `push-images.sh` script will push the docker images for all the versioned folders in the repo.
+Please see
+[`CONTRIBUTING.md` in JanusGraph's main repository][JG_CONTRIBUTING]
+for more information, including CLAs and best practices for working with
+GitHub.
 
-Prior to publishing, you'll need to login to [Docker Hub][DH] using the `docker login` command.
+## License
 
+JanusGraph Docker images are provided under the [Apache 2.0
+license](APACHE-2.0.txt) and documentation is provided under the [CC-BY-4.0
+license](CC-BY-4.0.txt). For details about this dual-license structure, please
+see [`LICENSE.txt`](LICENSE.txt).
 
 [JG]: http://janusgraph.org/
 [JG_BDB]: https://docs.janusgraph.org/latest/bdb.html
@@ -192,3 +192,5 @@ Prior to publishing, you'll need to login to [Docker Hub][DH] using the `docker 
 [JG_TEMPLATES]: https://github.com/search?q=org:JanusGraph+repo:janusgraph+filename:janusgraph.properties%20path:janusgraph-dist/src/assembly/static/conf/gremlin-server
 [GS_CONFIG]: http://tinkerpop.apache.org/docs/current/reference/#_configuring_2
 [DH]: https://hub.docker.com/
+[JG_COMMUNITY]: https://github.com/JanusGraph/janusgraph#community
+[JG_CONTRIBUTING]: https://github.com/JanusGraph/janusgraph/blob/master/CONTRIBUTING.md
