@@ -8,7 +8,7 @@ latest_version=${versions[${#versions[@]}-1]}
 
 for v in ${versions};
 do
-  docker push "experoinc/janusgraph:${v}"
+  docker push "janusgraph/janusgraph:${v}"
 done
 
-docker push "experoinc/janusgraph:latest"
+docker push "janusgraph/janusgraph:latest"

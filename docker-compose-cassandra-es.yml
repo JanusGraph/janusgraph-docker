@@ -2,7 +2,7 @@ version: "3"
 
 services:
   janusgraph:
-    image: experoinc/janusgraph:0.2.0
+    image: janusgraph/janusgraph:0.2.0
     container_name: jce-janusgraph
     environment:
       JANUS_STORAGE_BACKEND: cql
@@ -26,8 +26,6 @@ services:
     ports:
       - "9042:9042"
       - "9160:9160"
-    environment:
-      CASSANDRA_START_RPC: 'true'
     networks:
       - jce-network
   elasticsearch:
