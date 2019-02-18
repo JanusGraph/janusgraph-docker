@@ -1,7 +1,12 @@
+#
+# NOTE: THIS FILE IS GENERATED VIA "update.sh"
+#
+# PLEASE DO NOT EDIT IT DIRECTLY.
+#
 FROM openjdk:8-jdk
 
-ENV JANUS_VERSION=0.2.0 \
-    JANUS_HOME=/opt/janusgraph \
+ENV JANUS_VERSION=0.3.1
+ENV JANUS_HOME=/opt/janusgraph \
     JANUS_CONFIG_DIR=/etc/opt/janusgraph \
     JANUS_DATA_DIR=/var/lib/janusgraph \
     JANUS_STORAGE_TIMEOUT=60 \
@@ -42,17 +47,11 @@ RUN groupadd -r janusgraph --gid=999 && \
     rm -rf ${JANUS_HOME}/elasticsearch && \
     rm -rf ${JANUS_HOME}/javadocs && \
     rm -rf ${JANUS_HOME}/log && \
-    rm -rf ${JANUS_HOME}/examples && \
-    export BERKELEYJE_LUCENE_TEMPLATE=${JANUS_HOME}/conf/gremlin-server/janusgraph-berkeleyje-lucene-server.properties && \
-    cp ${JANUS_HOME}/conf/gremlin-server/janusgraph-berkeleyje-server.properties ${BERKELEYJE_LUCENE_TEMPLATE} && \
-    echo "index.search.backend=lucene" >> ${BERKELEYJE_LUCENE_TEMPLATE} && \
-    echo "index.search.directory=db/searchindex" >> ${BERKELEYJE_LUCENE_TEMPLATE} && \
-    echo ":remote connect tinkerpop.server conf/remote.yaml" > ${JANUS_HOME}/scripts/remote-connect.groovy && \
-    echo ":> g" >> ${JANUS_HOME}/scripts/remote-connect.groovy
-
+    rm -rf ${JANUS_HOME}/examples
 
 COPY docker-entrypoint.sh /usr/local/bin/
-COPY log4j-server.properties ${JANUS_HOME}/conf/gremlin-server/log4j-server.properties
+COPY conf/janusgraph-berkeleyje-lucene-server.properties conf/log4j-server.properties ${JANUS_HOME}/conf/gremlin-server/
+COPY scripts/remote-connect.groovy ${JANUS_HOME}/scripts/
 
 RUN chmod 755 /usr/local/bin/docker-entrypoint.sh && \
     chown -R janusgraph:janusgraph ${JANUS_HOME}

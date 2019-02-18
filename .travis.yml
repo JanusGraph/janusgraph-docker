@@ -1,0 +1,15 @@
+language: bash
+services: docker
+
+matrix:
+  include:
+    - os: linux
+      env: VERSION=0.2
+    - os: linux
+      env: VERSION=0.3
+
+script:
+  - bash build-images.sh $VERSION
+
+after_script:
+  - docker images
