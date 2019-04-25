@@ -15,22 +15,13 @@ Optionally build a specific version
 ./build-image.sh 0.3
 ```
 
-## Publishing
+## Deployment
 
-The `push-images.sh` script will push the docker images for all the versioned folders in the
-repository.
+We use continuous deployment via Travis CI to push images to Docker Hub.
+Every commit on `master` automatically triggers a deployment.
 
-```bash
-./push-images.sh
-```
-
-Optionally push a specific version
-
-```bash
-./push-images.sh 0.3
-```
-
-Prior to publishing, you'll need to login to [Docker Hub][DH] using the `docker login` command.
+Travis CI simply executes the `push-images.sh` script which will push the docker images for all the versioned folders
+in the repository.
 
 ## Updating and adding versions
 

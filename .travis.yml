@@ -13,3 +13,10 @@ script:
 
 after_script:
   - docker images
+
+deploy:
+  provider: script
+  skip_cleanup: true
+  script: echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin; bash push-images.sh $VERSION
+  on:
+    branch: master
