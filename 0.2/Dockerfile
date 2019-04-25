@@ -5,8 +5,12 @@
 #
 FROM openjdk:8-jdk
 
-ENV JANUS_VERSION=0.2.2
-ENV JANUS_HOME=/opt/janusgraph \
+ARG CREATED
+ARG REVISION
+ARG JANUS_VERSION=0.2.2
+
+ENV JANUS_VERSION=${JANUS_VERSION} \
+    JANUS_HOME=/opt/janusgraph \
     JANUS_CONFIG_DIR=/etc/opt/janusgraph \
     JANUS_DATA_DIR=/var/lib/janusgraph \
     JANUS_STORAGE_TIMEOUT=60 \
@@ -62,3 +66,14 @@ WORKDIR ${JANUS_HOME}
 
 ENTRYPOINT [ "docker-entrypoint.sh" ]
 CMD [ "janusgraph" ]
+
+LABEL org.opencontainers.image.title="JanusGraph Docker Image" \
+      org.opencontainers.image.description="Official JanusGraph Docker image" \
+      org.opencontainers.image.url="https://janusgraph.org/" \
+      org.opencontainers.image.documentation="https://docs.janusgraph.org/${JANUS_VERSION}/index.html" \
+      org.opencontainers.image.revision=${REVISION} \
+      org.opencontainers.image.source="https://github.com/JanusGraph/janusgraph-docker/" \
+      org.opencontainers.image.vendor="JanusGraph" \
+      org.opencontainers.image.version=${JANUS_VERSION} \
+      org.opencontainers.image.created=${CREATED} \
+      org.opencontainers.image.license="Apache-2.0"
