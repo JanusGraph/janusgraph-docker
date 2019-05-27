@@ -10,7 +10,7 @@ The default configuration uses the [Oracle Berkeley DB Java Edition][JG_BDB] sto
 and the [Apache Lucene][JG_LUCENE] indexing backend
 
 ```bash
-docker run --name janusgraph-default janusgraph/janusgraph:latest
+docker run --rm --name janusgraph-default janusgraph/janusgraph:latest
 ```
 
 ### Connecting with Gremlin Console

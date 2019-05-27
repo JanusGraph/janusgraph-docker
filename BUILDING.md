@@ -12,7 +12,7 @@ folder directories.
 Optionally build a specific version
 
 ```bash
-./build-image.sh 0.3
+./build-images.sh 0.3
 ```
 
 ## Deployment
