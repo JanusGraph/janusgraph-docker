@@ -1,5 +1,7 @@
 # JanusGraph Docker images
 
+[![Build Status][travis-img]][travis-url]
+
 This repository contains the [JanusGraph][JG] docker images.
 
 ## Usage
@@ -185,6 +187,8 @@ license](APACHE-2.0.txt) and documentation is provided under the [CC-BY-4.0
 license](CC-BY-4.0.txt). For details about this dual-license structure, please
 see [`LICENSE.txt`](LICENSE.txt).
 
+[travis-img]: https://travis-ci.org/JanusGraph/janusgraph-docker.svg?branch=master
+[travis-url]: https://travis-ci.org/JanusGraph/janusgraph-docker
 [JG]: http://janusgraph.org/
 [JG_BDB]: https://docs.janusgraph.org/latest/bdb.html
 [JG_CONFIG]: https://docs.janusgraph.org/latest/config-ref.html
