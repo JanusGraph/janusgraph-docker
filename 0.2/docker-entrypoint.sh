@@ -1,4 +1,9 @@
 #!/bin/bash
+#
+# NOTE: THIS FILE IS GENERATED VIA "update.sh"
+# DO NOT EDIT IT DIRECTLY; CHANGES WILL BE OVERWRITTEN.
+#
+#
 # Copyright 2019 JanusGraph Authors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,13 +17,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-#
-# ======================================================================
-#
-# NOTE: THIS FILE IS GENERATED VIA "update.sh"
-#
-# PLEASE DO NOT EDIT IT DIRECTLY.
-#
 
 JANUS_PROPS="${JANUS_CONFIG_DIR}/janusgraph.properties"
 GREMLIN_YAML="${JANUS_CONFIG_DIR}/gremlin-server.yaml"

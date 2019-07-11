@@ -27,32 +27,9 @@ fi
 template-generated-warning() {
 	COMMENT=$1
 	cat <<-EOD
-		${COMMENT} Copyright $(date +'%Y') JanusGraph Authors
-		${COMMENT}
-		${COMMENT} Licensed under the Apache License, Version 2.0 (the "License");
-		${COMMENT} you may not use this file except in compliance with the License.
-		${COMMENT} You may obtain a copy of the License at
-		${COMMENT}
-		${COMMENT}      http://www.apache.org/licenses/LICENSE-2.0
-		${COMMENT}
-		${COMMENT} Unless required by applicable law or agreed to in writing, software
-		${COMMENT} distributed under the License is distributed on an "AS IS" BASIS,
-		${COMMENT} WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-		${COMMENT} See the License for the specific language governing permissions and
-		${COMMENT} limitations under the License.
-		${COMMENT}
-	EOD
-
-	# Print a separator between the license (above) and the warning (below).
-	printf "${COMMENT} "
-	printf "=%.0s" {1..70}
-	printf "\n"
-
-	cat <<-EOD
 		${COMMENT}
 		${COMMENT} NOTE: THIS FILE IS GENERATED VIA "update.sh"
-		${COMMENT}
-		${COMMENT} PLEASE DO NOT EDIT IT DIRECTLY.
+		${COMMENT} DO NOT EDIT IT DIRECTLY; CHANGES WILL BE OVERWRITTEN.
 		${COMMENT}
 	EOD
 }
