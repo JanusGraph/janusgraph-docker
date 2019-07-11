@@ -1,9 +1,10 @@
 # JanusGraph Docker images
 
 [![Build Status][travis-img]][travis-url]
+[![Docker pulls][docker-pulls-img]][docker-hub-url]
 
 This repository contains build scripts and configuration files for the official
-[JanusGraph][JG] Docker images.
+[JanusGraph][JG] Docker images, which are published on the [Docker Hub][docker-hub-url].
 
 ## Usage
 
@@ -195,6 +196,8 @@ see [`LICENSE.txt`](LICENSE.txt).
 
 [travis-img]: https://travis-ci.org/JanusGraph/janusgraph-docker.svg?branch=master
 [travis-url]: https://travis-ci.org/JanusGraph/janusgraph-docker
+[docker-pulls-img]: https://img.shields.io/docker/pulls/janusgraph/janusgraph.svg
+[docker-hub-url]: https://hub.docker.com/r/janusgraph/janusgraph
 [JG]: http://janusgraph.org/
 [JG_BDB]: https://docs.janusgraph.org/latest/bdb.html
 [JG_CONFIG]: https://docs.janusgraph.org/latest/config-ref.html
