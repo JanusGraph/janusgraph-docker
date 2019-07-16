@@ -59,6 +59,16 @@ docker-compose -f docker-compose.yml run --rm \
     -e GREMLIN_REMOTE_HOSTS=janusgraph janusgraph ./bin/gremlin.sh
 ```
 
+### Generate Config
+
+JanusGraph-Docker has a single utility method. This method writes the JanusGraph Configuration and show the config afterward.
+
+```bash
+docker run --rm -it janusgraph/janusgraph:0.4.0 janusgraph show-config
+```
+
+**Default config locations are `/etc/opt/janusgraph/janusgraph.properties` and `/etc/opt/janusgraph/gremlin-server.yaml`.**
+
 ## Configuration
 
 The JanusGraph image provides multiple methods for configuration, including using environment

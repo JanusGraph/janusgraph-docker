@@ -56,15 +56,25 @@ if [ "$1" == 'janusgraph' ]; then
     fi
   done < <(env)
 
-  # wait for storage
-  if ! [ -z "${JANUS_STORAGE_TIMEOUT:-}" ]; then
-    F=$(mktemp --suffix .groovy)
-    echo "graph = JanusGraphFactory.open('${JANUS_CONFIG_DIR}/janusgraph.properties')" > $F
-    timeout ${JANUS_STORAGE_TIMEOUT}s bash -c \
-      "until bin/gremlin.sh -e $F > /dev/null 2>&1; do echo \"waiting for storage...\"; sleep 5; done"
-  fi
+  if [ "$2" == 'show-config' ]; then
+    echo "# contents of ${JANUS_PROPS}"
+    cat "$JANUS_PROPS"
+    echo "---------------------------------------"
+    echo "# contents of ${GREMLIN_YAML}"
+    cat "$GREMLIN_YAML"
+    exit 0
+  else
+    # wait for storage
+    if ! [ -z "${JANUS_STORAGE_TIMEOUT:-}" ]; then
+      F="$(mktemp --suffix .groovy)"
+      echo "graph = JanusGraphFactory.open('${JANUS_CONFIG_DIR}/janusgraph.properties')" > $F
+      timeout "${JANUS_STORAGE_TIMEOUT}s" bash -c \
+        "until bin/gremlin.sh -e $F > /dev/null 2>&1; do echo \"waiting for storage...\"; sleep 5; done"
+      rm -f "$F"
+    fi
 
-  exec ${JANUS_HOME}/bin/gremlin-server.sh ${JANUS_CONFIG_DIR}/gremlin-server.yaml
+    exec ${JANUS_HOME}/bin/gremlin-server.sh ${JANUS_CONFIG_DIR}/gremlin-server.yaml
+  fi
 fi
 
 # override hosts for remote connections with Gremlin Console
