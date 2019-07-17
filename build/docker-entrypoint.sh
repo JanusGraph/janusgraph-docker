@@ -68,7 +68,7 @@ if [ "$1" == 'janusgraph' ]; then
     if ! [ -z "${JANUS_STORAGE_TIMEOUT:-}" ]; then
       F="$(mktemp --suffix .groovy)"
       echo "graph = JanusGraphFactory.open('${JANUS_CONFIG_DIR}/janusgraph.properties')" > $F
-      timeout "${JANUS_STORAGE_TIMEOUT}s" bash -c \
+      timeout -k 10 "${JANUS_STORAGE_TIMEOUT}s" bash -c \
         "until bin/gremlin.sh -e $F > /dev/null 2>&1; do echo \"waiting for storage...\"; sleep 5; done"
       rm -f "$F"
     fi
