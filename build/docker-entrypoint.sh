@@ -21,6 +21,7 @@ GREMLIN_YAML="${JANUS_CONFIG_DIR}/gremlin-server.yaml"
 if [ "$1" == 'janusgraph' ] && [ "$(id -u)" == "0" ]; then
   mkdir -p ${JANUS_DATA_DIR} ${JANUS_CONFIG_DIR}
   chown -R janusgraph:janusgraph ${JANUS_DATA_DIR} ${JANUS_CONFIG_DIR}
+  usermod -d ${JANUS_HOME} janusgraph
   chmod 700 ${JANUS_DATA_DIR} ${JANUS_CONFIG_DIR}
 
   exec chroot --skip-chdir --userspec janusgraph:janusgraph / "${BASH_SOURCE}" "$@"
