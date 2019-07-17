@@ -23,6 +23,19 @@ services:
     # The mounted volume only makes sense if JanusGraph is being run with the BerekeleyDB storage.
     volumes:
       - "janusgraph-default-data:/var/lib/janusgraph"
+  gremlin-console:
+    image: janusgraph/janusgraph:latest
+    container_name: janusgraph-default-gremlin-console
+    environment:
+      GREMLIN_REMOTE_HOSTS: janusgraph
+      JANUS_PROPS_TEMPLATE: berkeleyje
+    stdin_open: yes
+    tty: yes
+    command: gremlin-console
+    #volumes:
+    #  - ./build/docker-entrypoint.sh:/usr/local/bin/docker-entrypoint.sh:ro
+    depends_on:
+      - janusgraph
 
 volumes:
   janusgraph-default-data:

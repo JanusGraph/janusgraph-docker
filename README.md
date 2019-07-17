@@ -45,18 +45,30 @@ gremlin> :> g.V().values('name')
 
 ### Using Docker Compose
 
-Start a JanusGraph Server instance using [`docker-compose.yml`](docker-compose.yml):
+Two docker-compose configurations are available, each supports different storage backend configuration:
+
+`docker-compose.yml` - Runs Janusgraph using only the Berkeley DB storage backend.
+`docker-compose-cql-es.yml` - Runs Janusgraph server with Cassandra + CQL for storage and Elasticearch for indexing.
+
+Start a JanusGraph Server instance using one of the above compose files:
 
 ```bash
-docker-compose -f docker-compose.yml up
+# BerkeleyDB
+docker-compose up
+# OR
+# Cassandra + CQL and Elasticsearch
+docker-compose -f docker-compose-cql-es.yml up
 ```
 
-Start a JanusGraph container running Gremlin Console in the same network using
-[`docker-compose.yml`](docker-compose.yml):
+The compose configurations also include a JanusGraph container running Gremlin Console in the same network.
+You can attach to the console and start using it:
 
 ```bash
-docker-compose -f docker-compose.yml run --rm \
-    -e GREMLIN_REMOTE_HOSTS=janusgraph janusgraph ./bin/gremlin.sh
+# BerkeleyDB
+docker attach janusgraph-default-gremlin-console
+# OR
+# Cassandra + CQL and Elasticsearch
+docker attach jce-gremlin-console
 ```
 
 ### Generate Config
@@ -90,9 +102,9 @@ The environment variables supported by the JanusGraph image are summarized below
 
 The `JANUS_PROPS_TEMPLATE` environment variable is used to define the base JanusGraph
 properties file. Values in the template properties file are used unless an alternate value
-for a given property is provided in the environment. The common usage will be to specify 
-a template for the general environment (e.g., `cassandra-es`) and then provide additional 
-individual configuration to override/extend the template. The available templates depend 
+for a given property is provided in the environment. The common usage will be to specify
+a template for the general environment (e.g., `cassandra-es`) and then provide additional
+individual configuration to override/extend the template. The available templates depend
 on the JanusGraph version (see [`conf/gremlin-server/janusgraph*.properties`][JG_TEMPLATES]).
 
 | `JANUS_PROPS_TEMPLATE` | Supported Versions |

@@ -55,6 +55,22 @@ services:
       - "9200:9200"
     networks:
       - jce-network
+  gremlin-console:
+    image: janusgraph/janusgraph:latest
+    container_name: jce-gremlin-console
+    environment:
+      GREMLIN_REMOTE_HOSTS: janusgraph
+      JANUS_PROPS_TEMPLATE: cassandra-es
+      janusgraph.storage.backend: cql
+      janusgraph.storage.hostname: jce-cassandra
+      janusgraph.index.search.hostname: jce-elastic
+    stdin_open: yes
+    tty: yes
+    command: gremlin-console
+    networks:
+      - jce-network
+    depends_on:
+      - janusgraph
 
 networks:
   jce-network:
