@@ -6,6 +6,14 @@
 This repository contains build scripts and configuration files for the official
 [JanusGraph][JG] Docker images, which are published on the [Docker Hub][docker-hub-url].
 
+> **Note:** even though the examples below and in the Docker Compose config
+> files (`*.yml`) use the `latest` image, when running a service in production,
+> be sure to specify a specific numeric version to
+> [avoid](https://medium.com/@mccode/the-misunderstood-docker-tag-latest-af3babfd6375)
+> [unexpected](https://github.com/hadolint/hadolint/wiki/DL3007)
+> [behavior changes](https://vsupalov.com/docker-latest-tag/)
+> due to `latest` pointing to a new release version.
+
 ## Usage
 
 ### Start a JanusGraph Server instance
@@ -81,7 +89,7 @@ g.addV('demigod').property('name', 'hercules').iterate()
 JanusGraph-Docker has a single utility method. This method writes the JanusGraph Configuration and show the config afterward.
 
 ```bash
-docker run --rm -it janusgraph/janusgraph:0.4.0 janusgraph show-config
+docker run --rm -it janusgraph/janusgraph:latest janusgraph show-config
 ```
 
 **Default config locations are `/etc/opt/janusgraph/janusgraph.properties` and `/etc/opt/janusgraph/gremlin-server.yaml`.**
