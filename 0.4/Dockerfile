@@ -32,10 +32,13 @@ ENV JANUS_VERSION=${JANUS_VERSION} \
     janusgraph.storage.directory=/var/lib/janusgraph/data \
     gremlinserver.graph=/etc/opt/janusgraph/janusgraph.properties \
     gremlinserver.threadPoolWorker=1 \
-    gremlinserver.gremlinPool=8
+    gremlinserver.gremlinPool=8 \
+    DEBIAN_FRONTEND=noninteractive
 
 RUN groupadd -r janusgraph --gid=999 && \
     useradd -r -g janusgraph --uid=999 janusgraph && \
+    apt-get update -yqq && \
+    apt-get install -yqq krb5-user && \
     curl -fSL https://github.com/JanusGraph/janusgraph/releases/download/v${JANUS_VERSION}/janusgraph-${JANUS_VERSION}-hadoop2.zip -o janusgraph.zip && \
     curl -fSL https://github.com/JanusGraph/janusgraph/releases/download/v${JANUS_VERSION}/janusgraph-${JANUS_VERSION}-hadoop2.zip.asc -o janusgraph.zip.asc && \
     curl -fSL https://github.com/JanusGraph/janusgraph/releases/download/v${JANUS_VERSION}/KEYS -o KEYS && \
