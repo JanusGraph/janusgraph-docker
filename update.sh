@@ -72,6 +72,11 @@ for version in "${versions[@]}"; do
   template-generated-warning "#" >> $dir/docker-entrypoint.sh
   awk 'NR>1' build/docker-entrypoint.sh >> $dir/docker-entrypoint.sh
 
+  # copy load-initdb
+  head -n 1 build/load-initdb.sh > $dir/load-initdb.sh
+  template-generated-warning "#" >> $dir/load-initdb.sh
+  awk 'NR>1' build/load-initdb.sh >> $dir/load-initdb.sh
+
   # copy resources
   copy-with-template-generated-warning conf/janusgraph-berkeleyje-lucene-server.properties "#"
   copy-with-template-generated-warning conf/log4j-server.properties "#"

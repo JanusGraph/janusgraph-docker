@@ -77,6 +77,8 @@ if [ "$1" == 'janusgraph' ]; then
       rm -f "$F"
     fi
 
+    /usr/local/bin/load-initdb.sh &
+
     exec ${JANUS_HOME}/bin/gremlin-server.sh ${JANUS_CONFIG_DIR}/gremlin-server.yaml
   fi
 fi
