@@ -59,6 +59,23 @@ docker-compose -f docker-compose.yml run --rm \
     -e GREMLIN_REMOTE_HOSTS=janusgraph janusgraph ./bin/gremlin.sh
 ```
 
+### Initialization
+
+When the container is started it will execute files with the extension
+`.groovy` that are found in `/docker-entrypoint-initdb.d` with the
+Gremlin Console.
+These scripts are only executed after the JanusGraph Server instance was
+started.
+So, they can [connect to it][JG_CONNECT_JAVA] and execute Gremlin traversals.
+
+For example, to add a vertex to the graph, create a file
+`/docker-entrypoint-initdb.d/add-vertex.groovy` with the following content:
+
+```groovy
+g = traversal().withRemote('conf/remote-graph.properties')
+g.addV('demigod').property('name', 'hercules').iterate()
+```
+
 ### Generate Config
 
 JanusGraph-Docker has a single utility method. This method writes the JanusGraph Configuration and show the config afterward.
@@ -83,6 +100,7 @@ The environment variables supported by the JanusGraph image are summarized below
 | `JANUS_PROPS_TEMPLATE` | JanusGraph properties file template (see [below](#properties-template)). The default properties file template is `berkeleyje-lucene`. |
 | `janusgraph.*` | Any JanusGraph configuration option to override in the template properties file, specified with an outer `janusgraph` namespace (e.g., `janusgraph.storage.hostname`). See [JanusGraph Configuration][JG_CONFIG] for available options. |
 | `gremlinserver.*` | Any Gremlin Server configuration option to override in the default configuration (YAML) file, specified with an outer `gremlinserver` namespace (e.g., `gremlinserver.threadPoolWorker`). See [Gremlin Server Configuration][GS_CONFIG] for available options. |
+| `JANUS_SERVER_TIMEOUT` | Timeout (seconds) used when waiting for Gremlin Server before executing initialization scripts. Default value is 30 seconds. |
 | `JANUS_STORAGE_TIMEOUT` | Timeout (seconds) used when waiting for the storage backend before starting Gremlin Server. Default value is 60 seconds. |
 | `GREMLIN_REMOTE_HOSTS` | Optional hostname for external Gremlin Server instance. Enables a container running Gremlin Console to connect to a remote server using `conf/remote.yaml`. |
 
@@ -212,6 +230,7 @@ see [`LICENSE.txt`](LICENSE.txt).
 [JG_BDB]: https://docs.janusgraph.org/latest/bdb.html
 [JG_CONFIG]: https://docs.janusgraph.org/latest/config-ref.html
 [JG_LUCENE]: https://docs.janusgraph.org/latest/lucene.html
+[JG_CONNECT_JAVA]: https://docs.janusgraph.org/connecting/java/
 [JG_TEMPLATES]: https://github.com/search?q=org:JanusGraph+repo:janusgraph+filename:janusgraph.properties%20path:janusgraph-dist/src/assembly/static/conf/gremlin-server
 [GS_CONFIG]: http://tinkerpop.apache.org/docs/current/reference/#_configuring_2
 [DH]: https://hub.docker.com/
