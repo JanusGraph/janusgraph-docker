@@ -72,7 +72,7 @@ CMD [ "janusgraph" ]
 LABEL org.opencontainers.image.title="JanusGraph Docker Image" \
       org.opencontainers.image.description="Official JanusGraph Docker image" \
       org.opencontainers.image.url="https://janusgraph.org/" \
-      org.opencontainers.image.documentation="https://docs.janusgraph.org/${JANUS_VERSION}/" \
+      org.opencontainers.image.documentation="https://docs.janusgraph.org/v0.3/" \
       org.opencontainers.image.revision="${REVISION}" \
       org.opencontainers.image.source="https://github.com/JanusGraph/janusgraph-docker/" \
       org.opencontainers.image.vendor="JanusGraph" \
