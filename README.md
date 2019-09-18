@@ -226,10 +226,10 @@ see [`LICENSE.txt`](LICENSE.txt).
 [travis-url]: https://travis-ci.org/JanusGraph/janusgraph-docker
 [docker-pulls-img]: https://img.shields.io/docker/pulls/janusgraph/janusgraph.svg
 [docker-hub-url]: https://hub.docker.com/r/janusgraph/janusgraph
-[JG]: http://janusgraph.org/
-[JG_BDB]: https://docs.janusgraph.org/latest/bdb.html
-[JG_CONFIG]: https://docs.janusgraph.org/latest/config-ref.html
-[JG_LUCENE]: https://docs.janusgraph.org/latest/lucene.html
+[JG]: https://janusgraph.org/
+[JG_BDB]: https://docs.janusgraph.org/storage-backend/bdb/
+[JG_CONFIG]: https://docs.janusgraph.org/basics/configuration-reference/
+[JG_LUCENE]: https://docs.janusgraph.org/index-backend/lucene/
 [JG_CONNECT_JAVA]: https://docs.janusgraph.org/connecting/java/
 [JG_TEMPLATES]: https://github.com/search?q=org:JanusGraph+repo:janusgraph+filename:janusgraph.properties%20path:janusgraph-dist/src/assembly/static/conf/gremlin-server
 [GS_CONFIG]: http://tinkerpop.apache.org/docs/current/reference/#_configuring_2
