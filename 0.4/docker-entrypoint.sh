@@ -52,12 +52,8 @@ if [ "$1" == 'janusgraph' ]; then
       continue
     fi
 
-    # if the line exists replace it; otherwise append it
-    if grep -q -E "^\s*${envvar_key}\s*${delimiter}\.*" ${config_file}; then
-      sed -ri "s#^(\s*${envvar_key}\s*${delimiter}).*#\\1${envvar_val}#" ${config_file}
-    else
-      echo "${envvar_key}${delimiter}${envvar_val}" >> ${config_file}
-    fi
+    # add new or update existing field in configuration file
+    yq w -i ${config_file} ${envvar_key} ${envvar_val}
   done < <(env)
 
   if [ "$2" == 'show-config' ]; then

@@ -53,6 +53,10 @@ RUN groupadd -r janusgraph --gid=999 && \
     rm -rf ${JANUS_HOME}/examples && \
     mkdir /docker-entrypoint-initdb.d
 
+RUN curl -fSL https://github.com/mikefarah/yq/releases/download/2.4.0/yq_linux_amd64 -o /usr/local/bin/yq_linux_amd64 && \
+    chmod 755 /usr/local/bin/yq_linux_amd64 && \
+    ln -s /usr/local/bin/yq_linux_amd64 /usr/local/bin/yq
+    
 COPY docker-entrypoint.sh /usr/local/bin/
 COPY load-initdb.sh /usr/local/bin/
 COPY conf/janusgraph-berkeleyje-lucene-server.properties conf/log4j-server.properties ${JANUS_HOME}/conf/gremlin-server/
