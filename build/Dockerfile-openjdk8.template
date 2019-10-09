@@ -49,7 +49,7 @@ RUN groupadd -r janusgraph --gid=999 && \
     rm -rf ${JANUS_HOME}/javadocs && \
     rm -rf ${JANUS_HOME}/log && \
     rm -rf /var/lib/apt/lists/* && \
-    rm -rf ${JANUS_HOME}/examples
+    rm -rf ${JANUS_HOME}/examples && \
     mkdir /docker-entrypoint-initdb.d
 
 COPY docker-entrypoint.sh /usr/local/bin/
