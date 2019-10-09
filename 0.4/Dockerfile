@@ -38,6 +38,8 @@ ENV JANUS_VERSION=${JANUS_VERSION} \
 
 RUN groupadd -r janusgraph --gid=999 && \
     useradd -r -g janusgraph --uid=999 janusgraph && \
+    apt-get update -y && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y krb5-user && \
     apt-get update -yqq && \
     apt-get install -yqq krb5-user && \
     curl -fSL https://github.com/JanusGraph/janusgraph/releases/download/v${JANUS_VERSION}/janusgraph-${JANUS_VERSION}-hadoop2.zip -o janusgraph.zip && \
@@ -53,7 +55,8 @@ RUN groupadd -r janusgraph --gid=999 && \
     rm -rf ${JANUS_HOME}/elasticsearch && \
     rm -rf ${JANUS_HOME}/javadocs && \
     rm -rf ${JANUS_HOME}/log && \
-    rm -rf ${JANUS_HOME}/examples && \
+    rm -rf /var/lib/apt/lists/* && \
+    rm -rf ${JANUS_HOME}/examples
     mkdir /docker-entrypoint-initdb.d
 
 COPY docker-entrypoint.sh /usr/local/bin/
