@@ -45,11 +45,11 @@ copy-with-template-generated-warning() {
 for version in "${versions[@]}"; do
   if [[ $version =~ ^[0-9]+.[0-9]+.[0-9]+$ ]]; then
     # given latest version, get versioned directory
-    dir=$(echo $version | cut -d"." -f 1-2)
+    major_minor_version=$(echo $version | cut -d"." -f 1-2)
     latest_version=$version
   else
     # given versioned directory, query GitHub API for latest version
-    dir="$version"
+    major_minor_version="$version"
     url=https://api.github.com/repos/janusgraph/janusgraph/tags
     filter='[.[].name|select(test("v'${version}'.[0-9]+$"))|ltrimstr("v")][0]'
     latest_version=$(curl -s "$url" | jq ''$filter'' | tr -d '"')
@@ -59,18 +59,25 @@ for version in "${versions[@]}"; do
     fi
   fi
 
+  dir=$major_minor_version
   echo "$version/$latest_version"
   mkdir -p $dir/conf $dir/scripts
 
   # copy Dockerfile and update version
   template-generated-warning "#" > "$dir/Dockerfile"
   sed -e 's!^\(ARG JANUS_VERSION\)\s*=.*!\1='"${latest_version}"'!' \
+    -e 's!{MAJOR_MINOR_VERSION_PLACEHOLDER}!'"${major_minor_version}"'!' \
     build/Dockerfile-openjdk8.template >> "$dir/Dockerfile"
 
   # copy docker-entrypoint
   head -n 1 build/docker-entrypoint.sh > $dir/docker-entrypoint.sh
   template-generated-warning "#" >> $dir/docker-entrypoint.sh
   awk 'NR>1' build/docker-entrypoint.sh >> $dir/docker-entrypoint.sh
+
+  # copy load-initdb
+  head -n 1 build/load-initdb.sh > $dir/load-initdb.sh
+  template-generated-warning "#" >> $dir/load-initdb.sh
+  awk 'NR>1' build/load-initdb.sh >> $dir/load-initdb.sh
 
   # copy resources
   copy-with-template-generated-warning conf/janusgraph-berkeleyje-lucene-server.properties "#"

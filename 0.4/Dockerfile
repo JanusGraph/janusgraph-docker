@@ -26,6 +26,7 @@ ENV JANUS_VERSION=${JANUS_VERSION} \
     JANUS_HOME=/opt/janusgraph \
     JANUS_CONFIG_DIR=/etc/opt/janusgraph \
     JANUS_DATA_DIR=/var/lib/janusgraph \
+    JANUS_SERVER_TIMEOUT=30 \
     JANUS_STORAGE_TIMEOUT=60 \
     JANUS_PROPS_TEMPLATE=berkeleyje-lucene \
     janusgraph.index.search.directory=/var/lib/janusgraph/index \
@@ -52,13 +53,16 @@ RUN groupadd -r janusgraph --gid=999 && \
     rm -rf ${JANUS_HOME}/elasticsearch && \
     rm -rf ${JANUS_HOME}/javadocs && \
     rm -rf ${JANUS_HOME}/log && \
-    rm -rf ${JANUS_HOME}/examples
+    rm -rf ${JANUS_HOME}/examples && \
+    mkdir /docker-entrypoint-initdb.d
 
 COPY docker-entrypoint.sh /usr/local/bin/
+COPY load-initdb.sh /usr/local/bin/
 COPY conf/janusgraph-berkeleyje-lucene-server.properties conf/log4j-server.properties ${JANUS_HOME}/conf/gremlin-server/
 COPY scripts/remote-connect.groovy ${JANUS_HOME}/scripts/
 
 RUN chmod 755 /usr/local/bin/docker-entrypoint.sh && \
+    chmod 755 /usr/local/bin/load-initdb.sh && \
     chown -R janusgraph:janusgraph ${JANUS_HOME}
 
 EXPOSE 8182
@@ -71,7 +75,7 @@ CMD [ "janusgraph" ]
 LABEL org.opencontainers.image.title="JanusGraph Docker Image" \
       org.opencontainers.image.description="Official JanusGraph Docker image" \
       org.opencontainers.image.url="https://janusgraph.org/" \
-      org.opencontainers.image.documentation="https://docs.janusgraph.org/${JANUS_VERSION}/" \
+      org.opencontainers.image.documentation="https://docs.janusgraph.org/v0.4/" \
       org.opencontainers.image.revision="${REVISION}" \
       org.opencontainers.image.source="https://github.com/JanusGraph/janusgraph-docker/" \
       org.opencontainers.image.vendor="JanusGraph" \
