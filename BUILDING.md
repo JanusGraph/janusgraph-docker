@@ -12,7 +12,7 @@ folder directories.
 Optionally build a specific version
 
 ```bash
-./build-images.sh 0.3
+./build-images.sh 0.4
 ```
 
 ## Deployment
@@ -28,7 +28,7 @@ in the repository.
 The `update.sh` script will update the Dockerfile in the relevant versioned folder directory to the provided version.
 
 ```bash
-./update.sh 0.3.2
+./update.sh 0.4.1
 ```
 
 Alternatively the script will automatically determine the latest version using the GitHub Releases API (requires
