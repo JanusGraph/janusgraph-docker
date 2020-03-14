@@ -1,3 +1,7 @@
+#
+# NOTE: THIS FILE IS GENERATED VIA "update.sh"
+# DO NOT EDIT IT DIRECTLY; CHANGES WILL BE OVERWRITTEN.
+#
 # Copyright 2019 JanusGraph Authors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,7 +18,7 @@
 
 FROM openjdk:8-jdk as builder
 
-ARG JANUS_VERSION=placeholder
+ARG JANUS_VERSION=0.5.0
 
 ENV JANUS_VERSION=${JANUS_VERSION} \
     JANUS_HOME=/opt/janusgraph
@@ -38,7 +42,7 @@ FROM openjdk:8-jdk
 
 ARG CREATED=test
 ARG REVISION=test
-ARG JANUS_VERSION=placeholder
+ARG JANUS_VERSION=0.5.0
 
 ENV JANUS_VERSION=${JANUS_VERSION} \
     JANUS_HOME=/opt/janusgraph \
@@ -79,7 +83,7 @@ CMD [ "janusgraph" ]
 LABEL org.opencontainers.image.title="JanusGraph Docker Image" \
       org.opencontainers.image.description="Official JanusGraph Docker image" \
       org.opencontainers.image.url="https://janusgraph.org/" \
-      org.opencontainers.image.documentation="https://docs.janusgraph.org/v{MAJOR_MINOR_VERSION_PLACEHOLDER}/" \
+      org.opencontainers.image.documentation="https://docs.janusgraph.org/v0.5/" \
       org.opencontainers.image.revision="${REVISION}" \
       org.opencontainers.image.source="https://github.com/JanusGraph/janusgraph-docker/" \
       org.opencontainers.image.vendor="JanusGraph" \

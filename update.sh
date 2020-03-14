@@ -43,6 +43,10 @@ copy-with-template-generated-warning() {
 }
 
 for version in "${versions[@]}"; do
+  if [[ $version =~ ^[0]+.[0-4](.[0-9]+)*$ ]]; then
+    continue
+  fi
+
   if [[ $version =~ ^[0-9]+.[0-9]+.[0-9]+$ ]]; then
     # given latest version, get versioned directory
     major_minor_version=$(echo $version | cut -d"." -f 1-2)
