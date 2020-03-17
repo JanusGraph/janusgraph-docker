@@ -16,10 +16,32 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+FROM openjdk:8-jdk as builder
+
+ARG JANUS_VERSION=0.3.3
+
+ENV JANUS_VERSION=${JANUS_VERSION} \
+    JANUS_HOME=/opt/janusgraph
+
+RUN curl -fSL https://github.com/JanusGraph/janusgraph/releases/download/v${JANUS_VERSION}/janusgraph-${JANUS_VERSION}-hadoop2.zip -o janusgraph.zip && \
+    curl -fSL https://github.com/JanusGraph/janusgraph/releases/download/v${JANUS_VERSION}/janusgraph-${JANUS_VERSION}-hadoop2.zip.asc -o janusgraph.zip.asc && \
+    curl -fSL https://github.com/JanusGraph/janusgraph/releases/download/v${JANUS_VERSION}/KEYS -o KEYS && \
+    gpg --import KEYS && \
+    gpg --batch --verify janusgraph.zip.asc janusgraph.zip && \
+    unzip janusgraph.zip && \
+    mv janusgraph-${JANUS_VERSION}-hadoop2 /opt/janusgraph && \
+    rm -rf ${JANUS_HOME}/elasticsearch && \
+    rm -rf ${JANUS_HOME}/javadocs && \
+    rm -rf ${JANUS_HOME}/log && \
+    rm -rf ${JANUS_HOME}/examples
+
+COPY conf/janusgraph-berkeleyje-lucene-server.properties conf/log4j-server.properties ${JANUS_HOME}/conf/gremlin-server/
+COPY scripts/remote-connect.groovy ${JANUS_HOME}/scripts/
+
 FROM openjdk:8-jdk
 
-ARG CREATED
-ARG REVISION
+ARG CREATED=test
+ARG REVISION=test
 ARG JANUS_VERSION=0.3.3
 
 ENV JANUS_VERSION=${JANUS_VERSION} \
@@ -39,27 +61,13 @@ RUN groupadd -r janusgraph --gid=999 && \
     useradd -r -g janusgraph --uid=999 janusgraph && \
     apt-get update -y && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y krb5-user && \
-    curl -fSL https://github.com/JanusGraph/janusgraph/releases/download/v${JANUS_VERSION}/janusgraph-${JANUS_VERSION}-hadoop2.zip -o janusgraph.zip && \
-    curl -fSL https://github.com/JanusGraph/janusgraph/releases/download/v${JANUS_VERSION}/janusgraph-${JANUS_VERSION}-hadoop2.zip.asc -o janusgraph.zip.asc && \
-    curl -fSL https://github.com/JanusGraph/janusgraph/releases/download/v${JANUS_VERSION}/KEYS -o KEYS && \
-    gpg --import KEYS && \
-    gpg --batch --verify janusgraph.zip.asc janusgraph.zip && \
-    unzip janusgraph.zip && \
-    mv janusgraph-${JANUS_VERSION}-hadoop2 /opt/janusgraph && \
-    rm janusgraph.zip && \
-    rm janusgraph.zip.asc && \
-    rm KEYS && \
-    rm -rf ${JANUS_HOME}/elasticsearch && \
-    rm -rf ${JANUS_HOME}/javadocs && \
-    rm -rf ${JANUS_HOME}/log && \
     rm -rf /var/lib/apt/lists/* && \
-    rm -rf ${JANUS_HOME}/examples && \
     mkdir /docker-entrypoint-initdb.d
+
+COPY --from=builder /opt/janusgraph/ /opt/janusgraph/
 
 COPY docker-entrypoint.sh /usr/local/bin/
 COPY load-initdb.sh /usr/local/bin/
-COPY conf/janusgraph-berkeleyje-lucene-server.properties conf/log4j-server.properties ${JANUS_HOME}/conf/gremlin-server/
-COPY scripts/remote-connect.groovy ${JANUS_HOME}/scripts/
 
 RUN chmod 755 /usr/local/bin/docker-entrypoint.sh && \
     chmod 755 /usr/local/bin/load-initdb.sh && \
