@@ -26,8 +26,9 @@ latest_version=${versions[${#versions[@]}-1]}
 for v in "${versions[@]}"; do
   if [ -z "${version}" ] || [ "${version}" == "${v}" ]; then
     # read full version from Dockerfile
-    full_version=$(grep "ARG JANUS_VERSION" ${v}/Dockerfile | cut -d"=" -f 2)
+    full_version=$(grep "ARG JANUS_VERSION" ${v}/Dockerfile | cut -d"=" -f 2 | head -n 1)
     # push relevant tags
+    echo "docker push \"janusgraph/janusgraph:${full_version}\""
     docker push "janusgraph/janusgraph:${full_version}"
     docker push "janusgraph/janusgraph:${v}"
     if [ "${v}" == "${latest_version}" ]; then
