@@ -44,19 +44,23 @@ if [ "$1" == 'janusgraph' ]; then
   while IFS='=' read -r envvar_key envvar_val; do
     if [[ "${envvar_key}" =~ janusgraph\. ]] && [[ ! -z ${envvar_val} ]]; then
       # strip namespace and use properties file delimiter for janusgraph properties
-      config_file=${JANUS_PROPS} delimiter="=" envvar_key=${envvar_key#"janusgraph."}
-    elif [[ "${envvar_key}" =~ gremlinserver\. ]] && [[ ! -z ${envvar_val} ]]; then
-      # strip namespace, use yaml delimiter and add space after delimiter for gremlinserver properties
-      config_file=${GREMLIN_YAML} delimiter=":" envvar_key=${envvar_key#"gremlinserver."} envvar_val=" $envvar_val"
+      envvar_key=${envvar_key#"janusgraph."}
+      # Add new or update existing field in configuration file
+      if grep -q -E "^\s*${envvar_key}\s*=\.*" ${JANUS_PROPS}; then
+        sed -ri "s#^(\s*${envvar_key}\s*=).*#\\1${envvar_val}#" ${JANUS_PROPS}
+      else
+        echo "${envvar_key}=${envvar_val}" >> ${JANUS_PROPS}
+      fi
+    elif [[ "${envvar_key}" =~ gremlinserver(%d)?[.]{1}(.+) ]]; then
+      # Check for edit mode %d after prefix
+      if [[ ${BASH_REMATCH[1]} == "%d" ]]; then edit_mode="d"; else edit_mode="w"; fi
+      # strip namespace from env variable and get value
+      envvar_key=${BASH_REMATCH[2]}
+      if [[ edit_mode == "d" ]]; then envvar_val=""; fi
+      # add new or update existing field in configuration file
+      yq ${edit_mode} -P -i ${GREMLIN_YAML} ${envvar_key} ${envvar_val}
     else
       continue
-    fi
-
-    # if the line exists replace it; otherwise append it
-    if grep -q -E "^\s*${envvar_key}\s*${delimiter}\.*" ${config_file}; then
-      sed -ri "s#^(\s*${envvar_key}\s*${delimiter}).*#\\1${envvar_val}#" ${config_file}
-    else
-      echo "${envvar_key}${delimiter}${envvar_val}" >> ${config_file}
     fi
   done < <(env)
 

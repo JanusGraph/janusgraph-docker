@@ -53,14 +53,17 @@ ENV JANUS_VERSION=${JANUS_VERSION} \
     JANUS_PROPS_TEMPLATE=berkeleyje-lucene \
     janusgraph.index.search.directory=/var/lib/janusgraph/index \
     janusgraph.storage.directory=/var/lib/janusgraph/data \
-    gremlinserver.graph=/etc/opt/janusgraph/janusgraph.properties \
+    gremlinserver.graphs.graph=/etc/opt/janusgraph/janusgraph.properties \
     gremlinserver.threadPoolWorker=1 \
     gremlinserver.gremlinPool=8
 
 RUN groupadd -r janusgraph --gid=999 && \
     useradd -r -g janusgraph --uid=999 janusgraph && \
+    printf "\\ndeb http://ppa.launchpad.net/rmescandon/yq/ubuntu xenial main\\n\
+deb-src http://ppa.launchpad.net/rmescandon/yq/ubuntu xenial main" >> /etc/apt/sources.list.d/janusgraph-dep.list
+RUN    apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 9A2D61F6BB03CED7522B8E7D6657DBE0CC86BB64 && \
     apt-get update -y && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y krb5-user && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends krb5-user yq && \
     rm -rf /var/lib/apt/lists/* && \
     mkdir /docker-entrypoint-initdb.d
 

@@ -107,7 +107,7 @@ The environment variables supported by the JanusGraph image are summarized below
 | ---- | ---- |
 | `JANUS_PROPS_TEMPLATE` | JanusGraph properties file template (see [below](#properties-template)). The default properties file template is `berkeleyje-lucene`. |
 | `janusgraph.*` | Any JanusGraph configuration option to override in the template properties file, specified with an outer `janusgraph` namespace (e.g., `janusgraph.storage.hostname`). See [JanusGraph Configuration][JG_CONFIG] for available options. |
-| `gremlinserver.*` | Any Gremlin Server configuration option to override in the default configuration (YAML) file, specified with an outer `gremlinserver` namespace (e.g., `gremlinserver.threadPoolWorker`). See [Gremlin Server Configuration][GS_CONFIG] for available options. |
+| `gremlinserver.*` | Any Gremlin Server configuration option to override in the default configuration (YAML) file, specified with an outer `gremlinserver` namespace (e.g., `gremlinserver.threadPoolWorker`). You can set or update nested options using additional dots (e.g., `gremlinserver.graphs.graph`). See [Gremlin Server Configuration][GS_CONFIG] for available options. See [Gremlin Server Environment Variable Syntax](#Gremlin-Server-Environment-Variable-Syntax) section below for help editing gremlin server configuration using environment variables. |
 | `JANUS_SERVER_TIMEOUT` | Timeout (seconds) used when waiting for Gremlin Server before executing initialization scripts. Default value is 30 seconds. |
 | `JANUS_STORAGE_TIMEOUT` | Timeout (seconds) used when waiting for the storage backend before starting Gremlin Server. Default value is 60 seconds. |
 | `GREMLIN_REMOTE_HOSTS` | Optional hostname for external Gremlin Server instance. Enables a container running Gremlin Console to connect to a remote server using `conf/remote.yaml`. |
@@ -185,6 +185,78 @@ storage.directory=/var/lib/janusgraph/data
 index.search.directory=/var/lib/janusgraph/index
 ```
 
+#### Gremlin Server Environment Variable Syntax
+
+Environment Variables that start with the prefix `gremlinserver.` or `gremlinserver%d.` are used
+to edit the base gremlin-server.yaml file. The text after the prefix in the environment variable
+name should follow a specific syntax. This syntax is implemented using the [yq][YQ_GITHUB] write and
+delete commands and the [yq documentation][YQ_DOC] can be used as a reference for this syntax.
+Secondly, the value of the environment variable will be used to set the value of the key specified
+in the environment variable name.
+
+Let's take a look at a few examples:
+
+##### Nested Properties
+
+For example, say we want to add a configuration property `graphs.ConfigurationMangementGraph`
+with the value `conf/JanusGraph-configurationmanagement.properties`:
+
+```text
+$ docker run --rm -it -e gremlinserver.graphs.ConfigurationManagementGraph=\
+conf/JanusGraph-configurationmanagement.properties janusgraph/janusgraph:latest janusgraph show-config
+...
+graphs:
+  graph: conf/gremlin-server/janusgraph-cql-es-server.properties
+  ConfigurationManagementGraph: conf/JanusGraph-configurationmanagement.properties
+scriptEngines:
+...
+```
+
+##### Delete a component
+
+To delete a component append %d to the 'gremlinserver.' prefix before the closing dot and then
+select the component following the prefix. Don't forget the trailing '='. For example to delete the
+graphs.graph configuration property we can do the following:
+
+```text
+$ docker run --rm -it -e gremlinserver%d.graphs.graph= janusgraph/janusgraph:latest janusgraph show-config
+...
+channelizer: org.apache.tinkerpop.gremlin.server.channel.WebSocketChannelizer
+graphs: {}
+scriptEngines:
+...
+```
+
+##### Append item and alternate indexing syntax
+
+This example shows how to append an item to a list. This can be done by adding "[+]" at the end of
+the environment variable name. This example also shows how to use square bracket syntax as an
+alternative to the dot syntax. This alternate syntax is useful if one of the keys in the property
+path contains special characters as we see in the example below.
+
+```text
+$ docker run --rm -it -e gremlinserver.scriptEngines.gremlin-groovy\
+.plugins["org.apache.tinkerpop.gremlin.jsr223.ScriptFileGremlinPlugin"]\
+.files[+]=/scripts/another-script.groovy janusgraph/janusgraph:latest janusgraph show-config
+...
+scriptEngines:
+  gremlin-groovy:
+    plugins:
+      org.janusgraph.graphdb.tinkerpop.plugin.JanusGraphGremlinPlugin: {}
+      org.apache.tinkerpop.gremlin.server.jsr223.GremlinServerGremlinPlugin: {}
+      org.apache.tinkerpop.gremlin.tinkergraph.jsr223.TinkerGraphGremlinPlugin: {}
+      org.apache.tinkerpop.gremlin.jsr223.ImportGremlinPlugin:
+        classImports:
+        - java.lang.Math
+        methodImports:
+        - java.lang.Math#*
+      org.apache.tinkerpop.gremlin.jsr223.ScriptFileGremlinPlugin:
+        files:
+        - scripts/empty-sample.groovy
+        - /scripts/another-script.groovy
+...
+```
+
 ### Mounted Configuration
 
 By default, the container stores both the `janusgraph.properties` and `gremlin-server.yaml` files
@@ -241,6 +313,8 @@ see [`LICENSE.txt`](LICENSE.txt).
 [JG_CONNECT_JAVA]: https://docs.janusgraph.org/connecting/java/
 [JG_TEMPLATES]: https://github.com/search?q=org:JanusGraph+repo:janusgraph+filename:janusgraph.properties%20path:janusgraph-dist/src/assembly/static/conf/gremlin-server
 [GS_CONFIG]: http://tinkerpop.apache.org/docs/current/reference/#_configuring_2
+[YQ_GITHUB]: https://github.com/mikefarah/yq
+[YQ_DOC]: https://mikefarah.gitbook.io/yq
 [DH]: https://hub.docker.com/
 [JG_COMMUNITY]: https://github.com/JanusGraph/janusgraph#community
 [JG_CONTRIBUTING]: https://github.com/JanusGraph/janusgraph/blob/master/CONTRIBUTING.md
