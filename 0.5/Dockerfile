@@ -18,7 +18,7 @@
 
 FROM openjdk:8-jdk as builder
 
-ARG JANUS_VERSION=0.5.1
+ARG JANUS_VERSION=0.5.2
 
 ENV JANUS_VERSION=${JANUS_VERSION} \
     JANUS_HOME=/opt/janusgraph
@@ -42,7 +42,7 @@ FROM openjdk:8-jdk
 
 ARG CREATED=test
 ARG REVISION=test
-ARG JANUS_VERSION=0.5.1
+ARG JANUS_VERSION=0.5.2
 
 ENV JANUS_VERSION=${JANUS_VERSION} \
     JANUS_HOME=/opt/janusgraph \
