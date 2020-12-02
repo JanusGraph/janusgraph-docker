@@ -12,9 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-gremlin.graph=org.janusgraph.core.JanusGraphFactory
+name: Editorconfig
 
-storage.backend=berkeleyje
-storage.directory=/var/lib/janusgraph/data
-index.default.backend=lucene
-index.default.directory=/var/lib/janusgraph/index
+on:
+  pull_request: {}
+
+jobs:
+  check:
+    runs-on: ubuntu-20.04
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Run editorconfig
+      uses: docker://mstruebing/editorconfig-checker

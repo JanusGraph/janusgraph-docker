@@ -12,9 +12,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-gremlin.graph=org.janusgraph.core.JanusGraphFactory
+name: Build Images
 
-storage.backend=berkeleyje
-storage.directory=/var/lib/janusgraph/data
-index.default.backend=lucene
-index.default.directory=/var/lib/janusgraph/index
+on:
+  push:
+    branches-ignore:
+      - "master"
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        version: ["0.2", "0.3", "0.4", "0.5"]
+    steps:
+    - uses: actions/checkout@v2
+    - name: build images
+      run: ./build-images.sh ${{ matrix.version }}
