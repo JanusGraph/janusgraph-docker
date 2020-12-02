@@ -20,13 +20,13 @@
 
 # exit early if directory is empty
 if ! [ "$(ls -A /docker-entrypoint-initdb.d)" ]; then
-    exit 0
+  exit 0
 fi
 
 # wait for JanusGraph Server
 if ! [ -z "${JANUS_SERVER_TIMEOUT:-}" ]; then
-    timeout "${JANUS_SERVER_TIMEOUT}s" bash -c \
-    "until true &>/dev/null </dev/tcp/127.0.0.1/8182; do echo \"waiting for JanusGraph Server...\"; sleep 5; done"
+  timeout "${JANUS_SERVER_TIMEOUT}s" bash -c \
+  "until true &>/dev/null </dev/tcp/127.0.0.1/8182; do echo \"waiting for JanusGraph Server...\"; sleep 5; done"
 fi
 
 for f in /docker-entrypoint-initdb.d/*; do

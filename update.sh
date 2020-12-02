@@ -20,18 +20,18 @@ cd $(dirname $0)
 
 versions=( "$@" )
 if [ ${#versions[@]} -eq 0 ]; then
-  versions=($(ls -d [0-9]*))
+    versions=($(ls -d [0-9]*))
 fi
 
 # generate header for auto-generated files
 template-generated-warning() {
-	COMMENT=$1
-	cat <<-EOD
-		${COMMENT}
-		${COMMENT} NOTE: THIS FILE IS GENERATED VIA "update.sh"
-		${COMMENT} DO NOT EDIT IT DIRECTLY; CHANGES WILL BE OVERWRITTEN.
-		${COMMENT}
-	EOD
+COMMENT=$1
+cat <<-EOD
+${COMMENT}
+${COMMENT} NOTE: THIS FILE IS GENERATED VIA "update.sh"
+${COMMENT} DO NOT EDIT IT DIRECTLY; CHANGES WILL BE OVERWRITTEN.
+${COMMENT}
+EOD
 }
 
 # copy template file to version directory and add header

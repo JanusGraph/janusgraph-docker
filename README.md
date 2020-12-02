@@ -116,9 +116,9 @@ The environment variables supported by the JanusGraph image are summarized below
 
 The `JANUS_PROPS_TEMPLATE` environment variable is used to define the base JanusGraph
 properties file. Values in the template properties file are used unless an alternate value
-for a given property is provided in the environment. The common usage will be to specify 
-a template for the general environment (e.g., `cassandra-es`) and then provide additional 
-individual configuration to override/extend the template. The available templates depend 
+for a given property is provided in the environment. The common usage will be to specify
+a template for the general environment (e.g., `cassandra-es`) and then provide additional
+individual configuration to override/extend the template. The available templates depend
 on the JanusGraph version (see [`conf/gremlin-server/janusgraph*.properties`][JG_TEMPLATES]).
 
 | `JANUS_PROPS_TEMPLATE` | Supported Versions |

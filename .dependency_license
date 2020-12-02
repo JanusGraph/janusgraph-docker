@@ -12,9 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-gremlin.graph=org.janusgraph.core.JanusGraphFactory
-
-storage.backend=berkeleyje
-storage.directory=/var/lib/janusgraph/data
-index.default.backend=lucene
-index.default.directory=/var/lib/janusgraph/index
+\.gitignore, Apache-2.0
+README.md, Apache-2.0
+BUILDING.md, Apache-2.0
+AUTHORS.txt, Apache-2.0
+DCO.txt, Apache-2.0
+.csproj, Apache-2.0
+CC-BY-4.0.txt, Apache-2.0
+CONTRIBUTORS.txt, Apache-2.0
+appsettings.json, Apache-2.0
