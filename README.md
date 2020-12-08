@@ -1,6 +1,6 @@
 # JanusGraph Docker images
 
-[![Build Status][travis-img]][travis-url]
+[![GitHub Workflow Status][actions-badge]][actions-url]
 [![Docker pulls][docker-pulls-img]][docker-hub-url]
 
 This repository contains build scripts and configuration files for the official
@@ -230,8 +230,8 @@ license](APACHE-2.0.txt) and documentation is provided under the [CC-BY-4.0
 license](CC-BY-4.0.txt). For details about this dual-license structure, please
 see [`LICENSE.txt`](LICENSE.txt).
 
-[travis-img]: https://travis-ci.org/JanusGraph/janusgraph-docker.svg?branch=master
-[travis-url]: https://travis-ci.org/JanusGraph/janusgraph-docker
+[actions-badge]: https://img.shields.io/github/workflow/status/JanusGraph/janusgraph-docker/Deploy%20Images
+[actions-url]: https://github.com/JanusGraph/janusgraph-docker/actions
 [docker-pulls-img]: https://img.shields.io/docker/pulls/janusgraph/janusgraph.svg
 [docker-hub-url]: https://hub.docker.com/r/janusgraph/janusgraph
 [JG]: https://janusgraph.org/
