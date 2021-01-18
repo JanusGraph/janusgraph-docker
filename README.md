@@ -12,7 +12,7 @@ This repository contains build scripts and configuration files for the official
 > [avoid](https://medium.com/@mccode/the-misunderstood-docker-tag-latest-af3babfd6375)
 > [unexpected](https://github.com/hadolint/hadolint/wiki/DL3007)
 > [behavior changes](https://vsupalov.com/docker-latest-tag/)
-> due to `latest` pointing to a new release version.
+> due to `latest` pointing to a new release version, see our [Docker tagging Policy](#docker-tagging-policy).
 
 ## Usage
 
@@ -22,7 +22,7 @@ The default configuration uses the [Oracle Berkeley DB Java Edition][JG_BDB] sto
 and the [Apache Lucene][JG_LUCENE] indexing backend:
 
 ```bash
-docker run --rm --name janusgraph-default janusgraph/janusgraph:latest
+docker run --rm --name janusgraph-default docker.io/janusgraph/janusgraph:latest
 ```
 
 ### Connecting with Gremlin Console
@@ -32,7 +32,7 @@ using Gremlin Console:
 
 ```bash
 $ docker run --rm --link janusgraph-default:janusgraph -e GREMLIN_REMOTE_HOSTS=janusgraph \
-    -it janusgraph/janusgraph:latest ./bin/gremlin.sh
+    -it docker.io/janusgraph/janusgraph:latest ./bin/gremlin.sh
 
          \,,,/
          (o o)
@@ -89,7 +89,7 @@ g.addV('demigod').property('name', 'hercules').iterate()
 JanusGraph-Docker has a single utility method. This method writes the JanusGraph Configuration and show the config afterward.
 
 ```bash
-docker run --rm -it janusgraph/janusgraph:latest janusgraph show-config
+docker run --rm -it docker.io/janusgraph/janusgraph:latest janusgraph show-config
 ```
 
 **Default config locations are `/etc/opt/janusgraph/janusgraph.properties` and `/etc/opt/janusgraph/gremlin-server.yaml`.**
@@ -138,7 +138,7 @@ storage and server settings:
 docker run --name janusgraph-default \
     -e janusgraph.storage.berkeleyje.cache-percentage=80 \
     -e gremlinserver.threadPoolWorker=2 \
-    janusgraph/janusgraph:latest
+    docker.io/janusgraph/janusgraph:latest
 ```
 
 Inspect the configuration:
@@ -203,7 +203,7 @@ with the value `conf/JanusGraph-configurationmanagement.properties`:
 
 ```text
 $ docker run --rm -it -e gremlinserver.graphs.ConfigurationManagementGraph=\
-conf/JanusGraph-configurationmanagement.properties janusgraph/janusgraph:latest janusgraph show-config
+conf/JanusGraph-configurationmanagement.properties docker.io/janusgraph/janusgraph:latest janusgraph show-config
 ...
 graphs:
   graph: conf/gremlin-server/janusgraph-cql-es-server.properties
@@ -219,7 +219,7 @@ select the component following the prefix. Don't forget the trailing '='. For ex
 graphs.graph configuration property we can do the following:
 
 ```text
-$ docker run --rm -it -e gremlinserver%d.graphs.graph= janusgraph/janusgraph:latest janusgraph show-config
+$ docker run --rm -it -e gremlinserver%d.graphs.graph= docker.io/janusgraph/janusgraph:latest janusgraph show-config
 ...
 channelizer: org.apache.tinkerpop.gremlin.server.channel.WebSocketChannelizer
 graphs: {}
@@ -237,7 +237,7 @@ path contains special characters as we see in the example below.
 ```text
 $ docker run --rm -it -e gremlinserver.scriptEngines.gremlin-groovy\
 .plugins["org.apache.tinkerpop.gremlin.jsr223.ScriptFileGremlinPlugin"]\
-.files[+]=/scripts/another-script.groovy janusgraph/janusgraph:latest janusgraph show-config
+.files[+]=/scripts/another-script.groovy docker.io/janusgraph/janusgraph:latest janusgraph show-config
 ...
 scriptEngines:
   gremlin-groovy:
@@ -278,6 +278,19 @@ $ docker-compose -f docker-compose-mount.yml up
 janusgraph-mount | chown: changing ownership of '/etc/opt/janusgraph/janusgraph.properties': Read-only file system
 ...
 ```
+
+## Docker Tagging Policy
+
+Here's the policy we follow for tagging our Docker images:
+
+| Tag            | Support level | Docker base image |
+|:--------------|:-------------|---|
+| latest         | <ul><li>latest JanusGraph release</li><li>no breaking changes guarantees</li></ul> | openjdk:8-jdk-buster |
+| 0.x            | <ul><li>newest patch-level version of JanusGraph</li><li>expect breaking changes</li></ul> | openjdk:8-jdk-buster |
+| 0.x.x          | <ul><li>defined JanusGraph version</li><li>breaking changes are only in this repo</li></ul> | openjdk:8-jdk-buster |
+| 0.x.x-revision | <ul><li>defined JanusGraph version</li><li>defined commit in JanusGraph-docker repo</li></ul> | openjdk:8-jdk-buster |
+
+We collect a list of changes in our docker images build process in our [CHANGELOG.md](./CHANGELOG.md)
 
 ## Community
 

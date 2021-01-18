@@ -15,6 +15,7 @@
 \.gitignore, Apache-2.0
 README.md, Apache-2.0
 BUILDING.md, Apache-2.0
+CHANGELOG.md, Apache-2.0
 AUTHORS.txt, Apache-2.0
 DCO.txt, Apache-2.0
 .csproj, Apache-2.0
