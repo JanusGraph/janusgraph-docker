@@ -21,18 +21,27 @@ version="${1:-}"
 # get all versions
 versions=($(ls -d [0-9]*))
 # get the last element of sorted version folders
-latest_version=${versions[${#versions[@]}-1]}
+latest_version="${versions[${#versions[@]}-1]}"
+
+REVISION="$(git rev-parse --short HEAD)"
+IMAGE_NAME="docker.io/janusgraph/janusgraph"
+
+echo "REVISION: ${REVISION}"
+echo "IMAGE_NAME: ${IMAGE_NAME}"
 
 for v in "${versions[@]}"; do
   if [ -z "${version}" ] || [ "${version}" == "${v}" ]; then
-    # read full version from Dockerfile
-    full_version=$(grep "ARG JANUS_VERSION" ${v}/Dockerfile | cut -d"=" -f 2 | head -n 1)
+    # prepare docker tags
+    full_version="$(grep "ARG JANUS_VERSION" ${v}/Dockerfile | head -n 1 | cut -d"=" -f 2)"
+    full_version_with_revision="${full_version}-${REVISION}"
+
     # push relevant tags
-    echo "docker push \"janusgraph/janusgraph:${full_version}\""
-    docker push "janusgraph/janusgraph:${full_version}"
-    docker push "janusgraph/janusgraph:${v}"
+    echo "docker push \"${IMAGE_NAME}:${full_version}\""
+    docker push "${IMAGE_NAME}:${full_version}"
+    docker push "${IMAGE_NAME}:${v}"
+    docker push "${IMAGE_NAME}:${full_version_with_revision}"
     if [ "${v}" == "${latest_version}" ]; then
-      docker push "janusgraph/janusgraph:latest"
+      docker push "${IMAGE_NAME}:latest"
     fi
   fi
 done

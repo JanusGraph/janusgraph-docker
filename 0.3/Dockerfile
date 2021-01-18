@@ -16,7 +16,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM openjdk:8-jdk as builder
+FROM openjdk:8-jdk-buster as builder
 
 ARG JANUS_VERSION=0.3.3
 
@@ -38,7 +38,7 @@ RUN curl -fSL https://github.com/JanusGraph/janusgraph/releases/download/v${JANU
 COPY conf/janusgraph-berkeleyje-lucene-server.properties conf/log4j-server.properties ${JANUS_HOME}/conf/gremlin-server/
 COPY scripts/remote-connect.groovy ${JANUS_HOME}/scripts/
 
-FROM openjdk:8-jdk
+FROM openjdk:8-jdk-buster
 
 ARG CREATED=test
 ARG REVISION=test
