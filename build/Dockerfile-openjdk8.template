@@ -15,13 +15,17 @@
 FROM openjdk:8-jdk as builder
 
 ARG JANUS_VERSION=placeholder
+ARG YQ_VERSION=3.4.1
 
 ENV JANUS_VERSION=${JANUS_VERSION} \
     JANUS_HOME=/opt/janusgraph
 
+WORKDIR /opt
+
 RUN curl -fSL https://github.com/JanusGraph/janusgraph/releases/download/v${JANUS_VERSION}/janusgraph-${JANUS_VERSION}.zip -o janusgraph.zip && \
     curl -fSL https://github.com/JanusGraph/janusgraph/releases/download/v${JANUS_VERSION}/janusgraph-${JANUS_VERSION}.zip.asc -o janusgraph.zip.asc && \
     curl -fSL https://github.com/JanusGraph/janusgraph/releases/download/v${JANUS_VERSION}/KEYS -o KEYS && \
+    curl -fSL https://github.com/mikefarah/yq/releases/download/${YQ_VERSION}/yq_linux_amd64 -o yq && \
     gpg --import KEYS && \
     gpg --batch --verify janusgraph.zip.asc janusgraph.zip && \
     unzip janusgraph.zip && \
@@ -55,21 +59,19 @@ ENV JANUS_VERSION=${JANUS_VERSION} \
 
 RUN groupadd -r janusgraph --gid=999 && \
     useradd -r -g janusgraph --uid=999 janusgraph && \
-    printf "\\ndeb http://ppa.launchpad.net/rmescandon/yq/ubuntu xenial main\\n\
-deb-src http://ppa.launchpad.net/rmescandon/yq/ubuntu xenial main" >> /etc/apt/sources.list.d/janusgraph-dep.list
-RUN    apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 9A2D61F6BB03CED7522B8E7D6657DBE0CC86BB64 && \
     apt-get update -y && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends krb5-user yq && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends krb5-user && \
     rm -rf /var/lib/apt/lists/* && \
     mkdir /docker-entrypoint-initdb.d
 
 COPY --from=builder /opt/janusgraph/ /opt/janusgraph/
-
+COPY --from=builder /opt/yq /usr/bin/yq
 COPY docker-entrypoint.sh /usr/local/bin/
 COPY load-initdb.sh /usr/local/bin/
 
 RUN chmod 755 /usr/local/bin/docker-entrypoint.sh && \
     chmod 755 /usr/local/bin/load-initdb.sh && \
+    chmod 755 /usr/bin/yq && \
     chown -R janusgraph:janusgraph ${JANUS_HOME}
 
 EXPOSE 8182
