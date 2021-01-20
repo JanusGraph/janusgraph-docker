@@ -285,10 +285,10 @@ Here's the policy we follow for tagging our Docker images:
 
 | Tag            | Support level | Docker base image |
 |:--------------|:-------------|---|
-| latest         | <ul><li>latest JanusGraph release</li><li>no breaking changes guarantees</li></ul> | openjdk:8-jdk-buster |
-| 0.x            | <ul><li>newest patch-level version of JanusGraph</li><li>expect breaking changes</li></ul> | openjdk:8-jdk-buster |
-| 0.x.x          | <ul><li>defined JanusGraph version</li><li>breaking changes are only in this repo</li></ul> | openjdk:8-jdk-buster |
-| 0.x.x-revision | <ul><li>defined JanusGraph version</li><li>defined commit in JanusGraph-docker repo</li></ul> | openjdk:8-jdk-buster |
+| latest         | <ul><li>latest JanusGraph release</li><li>no breaking changes guarantees</li></ul> | openjdk:8-jre-slim-buster |
+| 0.x            | <ul><li>newest patch-level version of JanusGraph</li><li>expect breaking changes</li></ul> | openjdk:8-jre-slim-buster |
+| 0.x.x          | <ul><li>defined JanusGraph version</li><li>breaking changes are only in this repo</li></ul> | openjdk:8-jre-slim-buster |
+| 0.x.x-revision | <ul><li>defined JanusGraph version</li><li>defined commit in JanusGraph-docker repo</li></ul> | openjdk:8-jre-slim-buster |
 
 We collect a list of changes in our docker images build process in our [CHANGELOG.md](./CHANGELOG.md)
 
