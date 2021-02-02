@@ -52,6 +52,7 @@ ENV JANUS_VERSION=${JANUS_VERSION} \
     JANUS_SERVER_TIMEOUT=30 \
     JANUS_STORAGE_TIMEOUT=60 \
     JANUS_PROPS_TEMPLATE=berkeleyje-lucene \
+    JANUS_INITDB_DIR=/docker-entrypoint-initdb.d \
     janusgraph.index.search.directory=/var/lib/janusgraph/index \
     janusgraph.storage.directory=/var/lib/janusgraph/data \
     gremlinserver.graphs.graph=/etc/opt/janusgraph/janusgraph.properties \
@@ -62,8 +63,7 @@ RUN groupadd -r janusgraph --gid=999 && \
     useradd -r -g janusgraph --uid=999 janusgraph && \
     apt-get update -y && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends krb5-user && \
-    rm -rf /var/lib/apt/lists/* && \
-    mkdir /docker-entrypoint-initdb.d
+    rm -rf /var/lib/apt/lists/*
 
 COPY --from=builder /opt/janusgraph/ /opt/janusgraph/
 COPY --from=builder /opt/yq /usr/bin/yq
@@ -73,11 +73,13 @@ COPY load-initdb.sh /usr/local/bin/
 RUN chmod 755 /usr/local/bin/docker-entrypoint.sh && \
     chmod 755 /usr/local/bin/load-initdb.sh && \
     chmod 755 /usr/bin/yq && \
-    chown -R janusgraph:janusgraph ${JANUS_HOME}
+    mkdir -p ${JANUS_INITDB_DIR} ${JANUS_CONFIG_DIR} ${JANUS_DATA_DIR} && \
+    chown -R janusgraph:janusgraph ${JANUS_HOME} ${JANUS_INITDB_DIR} ${JANUS_CONFIG_DIR} ${JANUS_DATA_DIR}
 
 EXPOSE 8182
 
 WORKDIR ${JANUS_HOME}
+USER janusgraph
 
 ENTRYPOINT [ "docker-entrypoint.sh" ]
 CMD [ "janusgraph" ]
