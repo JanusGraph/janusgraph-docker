@@ -58,7 +58,7 @@ if [ "$1" == 'janusgraph' ]; then
     else
       continue
     fi
-  done < <(env)
+  done < <(env | sort -r)
 
   if [ "$2" == 'show-config' ]; then
     echo "# contents of ${JANUS_PROPS}"
