@@ -41,6 +41,9 @@ RUN apt update -y && apt install -y gpg unzip curl && \
     rm -rf ${JANUS_HOME}/examples
 
 COPY conf/janusgraph-berkeleyje-lucene-server.properties conf/log4j-server.properties ${JANUS_HOME}/conf/gremlin-server/
+COPY conf/gremlin-server-subgraph.yaml ${JANUS_HOME}/conf/gremlin-server/gremlin-server.yaml
+COPY conf/remote-subgraphs.yaml ${JANUS_HOME}/conf/remote-subgraphs.yaml
+
 COPY scripts/remote-connect.groovy ${JANUS_HOME}/scripts/
 
 FROM openjdk:8-jre-slim-buster
