@@ -19,7 +19,7 @@
 # limitations under the License.
 
 # exit early if directory is empty
-if ! [ "$(ls -A /docker-entrypoint-initdb.d)" ]; then
+if ! [ "$(ls -A ${JANUS_INITDB_DIR})" ]; then
   exit 0
 fi
 
@@ -29,7 +29,7 @@ if ! [ -z "${JANUS_SERVER_TIMEOUT:-}" ]; then
   "until true &>/dev/null </dev/tcp/127.0.0.1/8182; do echo \"waiting for JanusGraph Server...\"; sleep 5; done"
 fi
 
-for f in /docker-entrypoint-initdb.d/*; do
+for f in ${JANUS_INITDB_DIR}/*; do
   case "$f" in
     *.groovy) echo "$0: running $f"; ${JANUS_HOME}/bin/gremlin.sh -e "$f"; echo ;;
     *)        echo "$0: ignoring $f" ;;
