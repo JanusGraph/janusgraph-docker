@@ -103,14 +103,15 @@ variables to set options and using bind-mounted configuration.
 
 The environment variables supported by the JanusGraph image are summarized below.
 
-| Variable | Description |
-| ---- | ---- |
-| `JANUS_PROPS_TEMPLATE` | JanusGraph properties file template (see [below](#properties-template)). The default properties file template is `berkeleyje-lucene`. |
-| `janusgraph.*` | Any JanusGraph configuration option to override in the template properties file, specified with an outer `janusgraph` namespace (e.g., `janusgraph.storage.hostname`). See [JanusGraph Configuration][JG_CONFIG] for available options. |
-| `gremlinserver.*` | Any Gremlin Server configuration option to override in the default configuration (YAML) file, specified with an outer `gremlinserver` namespace (e.g., `gremlinserver.threadPoolWorker`). You can set or update nested options using additional dots (e.g., `gremlinserver.graphs.graph`). See [Gremlin Server Configuration][GS_CONFIG] for available options. See [Gremlin Server Environment Variable Syntax](#Gremlin-Server-Environment-Variable-Syntax) section below for help editing gremlin server configuration using environment variables. |
-| `JANUS_SERVER_TIMEOUT` | Timeout (seconds) used when waiting for Gremlin Server before executing initialization scripts. Default value is 30 seconds. |
-| `JANUS_STORAGE_TIMEOUT` | Timeout (seconds) used when waiting for the storage backend before starting Gremlin Server. Default value is 60 seconds. |
-| `GREMLIN_REMOTE_HOSTS` | Optional hostname for external Gremlin Server instance. Enables a container running Gremlin Console to connect to a remote server using `conf/remote.yaml`. |
+| Variable | Description | Default |
+| ---- | ---- | ---- |
+| `JANUS_PROPS_TEMPLATE` | JanusGraph properties file template (see [below](#properties-template)). |`berkeleyje-lucene` |
+| `janusgraph.*` | Any JanusGraph configuration option to override in the template properties file, specified with an outer `janusgraph` namespace (e.g., `janusgraph.storage.hostname`). See [JanusGraph Configuration][JG_CONFIG] for available options. | no default value | 
+| `gremlinserver.*` | Any Gremlin Server configuration option to override in the default configuration (YAML) file, specified with an outer `gremlinserver` namespace (e.g., `gremlinserver.threadPoolWorker`). You can set or update nested options using additional dots (e.g., `gremlinserver.graphs.graph`). See [Gremlin Server Configuration][GS_CONFIG] for available options. See [Gremlin Server Environment Variable Syntax](#Gremlin-Server-Environment-Variable-Syntax) section below for help editing gremlin server configuration using environment variables. | no default value` | 
+| `JANUS_SERVER_TIMEOUT` | Timeout (seconds) used when waiting for Gremlin Server before executing initialization scripts. | `30` |
+| `JANUS_STORAGE_TIMEOUT` | Timeout (seconds) used when waiting for the storage backend before starting Gremlin Server. | `60` |
+| `GREMLIN_REMOTE_HOSTS` | Optional hostname for external Gremlin Server instance. Enables a container running Gremlin Console to connect to a remote server using `conf/remote.yaml`. | no default value | 
+| `JANUS_INITDB_DIR` | Defines the location of the initialization scripts.  | `/docker-entrypoint-initdb.d` |
 
 #### Properties template
 
