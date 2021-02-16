@@ -129,6 +129,8 @@ on the JanusGraph version (see [`conf/gremlin-server/janusgraph*.properties`][JG
 | `berkeleyje-lucene` (default) | all |
 | `cassandra-es` | all |
 | `cql-es` | >=0.2.1 |
+| `cql` | >=0.5.3 |
+| `inmemory` | >=0.5.3 |
 
 ##### Example: Berkeleyje-Lucene
 
