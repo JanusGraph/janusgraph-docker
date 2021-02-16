@@ -64,7 +64,7 @@ ENV JANUS_VERSION=${JANUS_VERSION} \
     gremlinserver.gremlinPool=8
 
 RUN groupadd -r janusgraph --gid=999 && \
-    useradd -r -g janusgraph --uid=999 janusgraph && \
+    useradd -r -g janusgraph --uid=999 -d ${JANUS_DATA_DIR} janusgraph && \
     apt-get update -y && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends krb5-user && \
     rm -rf /var/lib/apt/lists/*

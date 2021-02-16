@@ -280,6 +280,18 @@ janusgraph-mount | chown: changing ownership of '/etc/opt/janusgraph/janusgraph.
 ...
 ```
 
+## Default user JanusGraph
+
+> **Note:** The default user of the image changed for all version beginning with the newest image version of 0.5.3.
+
+The user is created with uid 999 and gid 999 and user's a home dir is `/var/lib/janusgraph`. 
+
+Folloing folder are created with these user rights:
+* `/var/lib/janusgraph`
+* `/etc/opt/janusgraph`
+* `/opt/janusgraph`
+* `/docker-entrypoint-initdb.d`
+
 ## Docker Tagging Policy
 
 Here's the policy we follow for tagging our Docker images:
