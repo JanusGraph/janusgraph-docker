@@ -84,7 +84,14 @@ for version in "${versions[@]}"; do
   awk 'NR>1' build/load-initdb.sh >> $dir/load-initdb.sh
 
   # copy resources
+  copy-with-template-generated-warning conf/gremlin-server.yaml "#"
+  copy-with-template-generated-warning conf/janusgraph-berkeleyje-es-server.properties "#"
   copy-with-template-generated-warning conf/janusgraph-berkeleyje-lucene-server.properties "#"
+  copy-with-template-generated-warning conf/janusgraph-berkeleyje-server.properties "#"
+  copy-with-template-generated-warning conf/janusgraph-cassandra-es-server.properties "#"
+  copy-with-template-generated-warning conf/janusgraph-cql-es-server.properties "#"
+  copy-with-template-generated-warning conf/janusgraph-cql-server.properties "#"
+  copy-with-template-generated-warning conf/janusgraph-inmemory-server.properties "#"
   copy-with-template-generated-warning conf/log4j-server.properties "#"
   copy-with-template-generated-warning scripts/remote-connect.groovy "//"
 done

@@ -40,7 +40,7 @@ RUN apt update -y && apt install -y gpg unzip curl && \
     rm -rf ${JANUS_HOME}/log && \
     rm -rf ${JANUS_HOME}/examples
 
-COPY conf/janusgraph-berkeleyje-lucene-server.properties conf/log4j-server.properties ${JANUS_HOME}/conf/gremlin-server/
+COPY conf/ ${JANUS_HOME}/conf/gremlin-server/
 COPY scripts/remote-connect.groovy ${JANUS_HOME}/scripts/
 
 FROM openjdk:8-jre-slim-buster
@@ -57,8 +57,6 @@ ENV JANUS_VERSION=${JANUS_VERSION} \
     JANUS_STORAGE_TIMEOUT=60 \
     JANUS_PROPS_TEMPLATE=berkeleyje-lucene \
     JANUS_INITDB_DIR=/docker-entrypoint-initdb.d \
-    janusgraph.index.search.directory=/var/lib/janusgraph/index \
-    janusgraph.storage.directory=/var/lib/janusgraph/data \
     gremlinserver.graphs.graph=/etc/opt/janusgraph/janusgraph.properties \
     gremlinserver.threadPoolWorker=1 \
     gremlinserver.gremlinPool=8
