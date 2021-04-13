@@ -36,10 +36,7 @@ RUN apt update -y && apt install -y gpg unzip curl && \
     rm -rf ${JANUS_HOME}/log && \
     rm -rf ${JANUS_HOME}/examples
 
-COPY conf/janusgraph-berkeleyje-lucene-server.properties conf/log4j-server.properties ${JANUS_HOME}/conf/gremlin-server/
-COPY conf/gremlin-server-subgraph.yaml ${JANUS_HOME}/conf/gremlin-server/gremlin-server.yaml
-COPY conf/remote-subgraphs.yaml ${JANUS_HOME}/conf/remote-subgraphs.yaml
-
+COPY conf/ ${JANUS_HOME}/conf/gremlin-server/
 COPY scripts/remote-connect.groovy ${JANUS_HOME}/scripts/
 
 FROM openjdk:8-jre-slim-buster
@@ -55,18 +52,16 @@ ENV JANUS_VERSION=${JANUS_VERSION} \
     JANUS_SERVER_TIMEOUT=30 \
     JANUS_STORAGE_TIMEOUT=60 \
     JANUS_PROPS_TEMPLATE=berkeleyje-lucene \
-    janusgraph.index.search.directory=/var/lib/janusgraph/index \
-    janusgraph.storage.directory=/var/lib/janusgraph/data \
+    JANUS_INITDB_DIR=/docker-entrypoint-initdb.d \
     gremlinserver.graphs.graph=/etc/opt/janusgraph/janusgraph.properties \
     gremlinserver.threadPoolWorker=1 \
     gremlinserver.gremlinPool=8
 
 RUN groupadd -r janusgraph --gid=999 && \
-    useradd -r -g janusgraph --uid=999 janusgraph && \
+    useradd -r -g janusgraph --uid=999 -d ${JANUS_DATA_DIR} janusgraph && \
     apt-get update -y && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends krb5-user && \
-    rm -rf /var/lib/apt/lists/* && \
-    mkdir /docker-entrypoint-initdb.d
+    rm -rf /var/lib/apt/lists/*
 
 COPY --from=builder /opt/janusgraph/ /opt/janusgraph/
 COPY --from=builder /opt/yq /usr/bin/yq
@@ -76,11 +71,13 @@ COPY load-initdb.sh /usr/local/bin/
 RUN chmod 755 /usr/local/bin/docker-entrypoint.sh && \
     chmod 755 /usr/local/bin/load-initdb.sh && \
     chmod 755 /usr/bin/yq && \
-    chown -R janusgraph:janusgraph ${JANUS_HOME}
+    mkdir -p ${JANUS_INITDB_DIR} ${JANUS_CONFIG_DIR} ${JANUS_DATA_DIR} && \
+    chown -R janusgraph:janusgraph ${JANUS_HOME} ${JANUS_INITDB_DIR} ${JANUS_CONFIG_DIR} ${JANUS_DATA_DIR}
 
 EXPOSE 8182
 
 WORKDIR ${JANUS_HOME}
+USER janusgraph
 
 ENTRYPOINT [ "docker-entrypoint.sh" ]
 CMD [ "janusgraph" ]
