@@ -23,3 +23,4 @@ serializer:
     ioRegistries:
       - org.janusgraph.graphdb.tinkerpop.JanusGraphIoRegistry
       - org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerIoRegistryV3d0
+
