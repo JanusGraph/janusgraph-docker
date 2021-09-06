@@ -43,7 +43,7 @@ copy-with-template-generated-warning() {
 }
 
 for version in "${versions[@]}"; do
-  if [[ $version =~ ^[0]+.[0-4](.[0-9]+)*$ ]]; then
+  if [[ $version =~ ^[0]+.[0-5](.[0-9]+)*$ ]]; then
     continue
   fi
 
@@ -84,11 +84,10 @@ for version in "${versions[@]}"; do
   awk 'NR>1' build/load-initdb.sh >> $dir/load-initdb.sh
 
   # copy resources
-  copy-with-template-generated-warning conf/gremlin-server.yaml "#"
+  copy-with-template-generated-warning conf/janusgraph-server.yaml "#"
   copy-with-template-generated-warning conf/janusgraph-berkeleyje-es-server.properties "#"
   copy-with-template-generated-warning conf/janusgraph-berkeleyje-lucene-server.properties "#"
   copy-with-template-generated-warning conf/janusgraph-berkeleyje-server.properties "#"
-  copy-with-template-generated-warning conf/janusgraph-cassandra-es-server.properties "#"
   copy-with-template-generated-warning conf/janusgraph-cql-es-server.properties "#"
   copy-with-template-generated-warning conf/janusgraph-cql-server.properties "#"
   copy-with-template-generated-warning conf/janusgraph-inmemory-server.properties "#"

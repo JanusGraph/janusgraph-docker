@@ -19,8 +19,7 @@ services:
     image: docker.io/janusgraph/janusgraph:latest
     container_name: jce-janusgraph
     environment:
-      JANUS_PROPS_TEMPLATE: cassandra-es
-      janusgraph.storage.backend: cql
+      JANUS_PROPS_TEMPLATE: cql-es
       janusgraph.storage.hostname: jce-cassandra
       janusgraph.index.search.hostname: jce-elastic
     ports:
@@ -32,6 +31,7 @@ services:
       interval: 10s
       timeout: 30s
       retries: 3
+
   cassandra:
     image: cassandra:3
     container_name: jce-cassandra
@@ -40,6 +40,7 @@ services:
       - "9160:9160"
     networks:
       - jce-network
+
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:6.6.0
     container_name: jce-elastic

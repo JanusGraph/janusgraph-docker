@@ -92,7 +92,7 @@ JanusGraph-Docker has a single utility method. This method writes the JanusGraph
 docker run --rm -it docker.io/janusgraph/janusgraph:latest janusgraph show-config
 ```
 
-**Default config locations are `/etc/opt/janusgraph/janusgraph.properties` and `/etc/opt/janusgraph/gremlin-server.yaml`.**
+**Default config locations are `/etc/opt/janusgraph/janusgraph.properties` and `/etc/opt/janusgraph/janusgraph-server.yaml`.**
 
 ## Configuration
 
@@ -120,14 +120,14 @@ properties file. Values in the template properties file are used unless an alter
 for a given property is provided in the environment. The common usage will be to specify
 a template for the general environment (e.g., `cassandra-es`) and then provide additional
 individual configuration to override/extend the template. The available templates depend
-on the JanusGraph version (see [`conf/gremlin-server/janusgraph*.properties`][JG_TEMPLATES]).
+on the JanusGraph version (see [`conf/janusgraph*.properties`][JG_TEMPLATES]).
 
 | `JANUS_PROPS_TEMPLATE` | Supported Versions |
 | ----- | ----- |
 | `berkeleyje` | all |
 | `berkeleyje-es` | all |
 | `berkeleyje-lucene` (default) | all |
-| `cassandra-es` | all |
+| `cassandra-es` | <=0.5.3 |
 | `cql-es` | >=0.2.1 |
 | `cql` | >=0.5.3 |
 | `inmemory` | >=0.5.3 |
@@ -155,13 +155,13 @@ index.search.backend=lucene
 storage.berkeleyje.cache-percentage=80
 index.search.directory=/var/lib/janusgraph/index
 
-$ docker exec janusgraph-default grep threadPoolWorker /etc/opt/janusgraph/gremlin-server.yaml
+$ docker exec janusgraph-default grep threadPoolWorker /etc/opt/janusgraph/janusgraph-server.yaml
 threadPoolWorker: 2
 ```
 
 ##### Example: Cassandra-ES with Docker Compose
 
-Start a JanusGraph instance with Cassandra and Elasticsearch using the `cassandra-es`
+Start a JanusGraph instance with Cassandra and Elasticsearch using the `cql-es`
 template through [`docker-compose-cql-es.yml`](docker-compose-cql-es.yml):
 
 ```bash
@@ -191,7 +191,7 @@ index.search.directory=/var/lib/janusgraph/index
 #### Gremlin Server Environment Variable Syntax
 
 Environment Variables that start with the prefix `gremlinserver.` or `gremlinserver%d.` are used
-to edit the base gremlin-server.yaml file. The text after the prefix in the environment variable
+to edit the base janusgraph-server.yaml file. The text after the prefix in the environment variable
 name should follow a specific syntax. This syntax is implemented using the [yq][YQ_GITHUB] write and
 delete commands and the [yq documentation][YQ_DOC] can be used as a reference for this syntax.
 Secondly, the value of the environment variable will be used to set the value of the key specified
@@ -209,7 +209,7 @@ $ docker run --rm -it -e gremlinserver.graphs.ConfigurationManagementGraph=\
 conf/JanusGraph-configurationmanagement.properties docker.io/janusgraph/janusgraph:latest janusgraph show-config
 ...
 graphs:
-  graph: conf/gremlin-server/janusgraph-cql-es-server.properties
+  graph: conf/janusgraph-cql-es-server.properties
   ConfigurationManagementGraph: conf/JanusGraph-configurationmanagement.properties
 scriptEngines:
 ...
@@ -262,7 +262,7 @@ scriptEngines:
 
 ### Mounted Configuration
 
-By default, the container stores both the `janusgraph.properties` and `gremlin-server.yaml` files
+By default, the container stores both the `janusgraph.properties` and `janusgraph-server.yaml` files
 in the `JANUS_CONFIG_DIR` directory which maps to `/etc/opt/janusgraph`. When the container
 starts, it updates those files using the environment variable values. If you have a specific
 configuration and do not wish to use environment variables to configure JanusGraph, you can
