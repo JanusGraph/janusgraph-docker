@@ -1,5 +1,9 @@
 #!/bin/bash
 #
+# NOTE: THIS FILE IS GENERATED VIA "update.sh"
+# DO NOT EDIT IT DIRECTLY; CHANGES WILL BE OVERWRITTEN.
+#
+#
 # Copyright 2019 JanusGraph Authors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
