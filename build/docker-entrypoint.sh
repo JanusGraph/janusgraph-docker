@@ -37,7 +37,7 @@ if [ "$1" == 'janusgraph' ]; then
   chmod -R 600 ${JANUS_CONFIG_DIR}/*
 
   # apply configuration from environment
-  while IFS='=' read -r envvar_key envvar_val; do
+  while IFS=' ' read -r envvar_key envvar_val; do
     if [[ "${envvar_key}" =~ janusgraph\. ]] && [[ ! -z ${envvar_val} ]]; then
       # strip namespace and use properties file delimiter for janusgraph properties
       envvar_key=${envvar_key#"janusgraph."}
@@ -58,7 +58,7 @@ if [ "$1" == 'janusgraph' ]; then
     else
       continue
     fi
-  done < <(env | sort -r)
+  done < <(env | sort -r | awk -F= '{ st = index($0, "="); print $1 " " substr($0, st+1) }')
 
   if [ "$2" == 'show-config' ]; then
     echo "# contents of ${JANUS_PROPS}"
