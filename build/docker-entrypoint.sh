@@ -86,6 +86,7 @@ fi
 # override hosts for remote connections with Gremlin Console
 if ! [ -z "${GREMLIN_REMOTE_HOSTS:-}" ]; then
   sed -i "s/hosts\s*:.*/hosts: [$GREMLIN_REMOTE_HOSTS]/" ${JANUS_HOME}/conf/remote.yaml
+  sed -i "s/hosts\s*:.*/hosts: [$GREMLIN_REMOTE_HOSTS]/" ${JANUS_HOME}/conf/remote-objects.yaml
 fi
 
 exec "$@"
