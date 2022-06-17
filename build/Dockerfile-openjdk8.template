@@ -41,7 +41,7 @@ RUN apt update -y && apt install -y gpg unzip curl && \
 COPY conf/ ${JANUS_HOME}/conf/
 COPY scripts/remote-connect.groovy ${JANUS_HOME}/scripts/
 
-FROM openjdk:8-jre-slim-buster
+FROM openjdk:8-jre-alpine
 
 ARG CREATED=test
 ARG REVISION=test
@@ -59,11 +59,10 @@ ENV JANUS_VERSION=${JANUS_VERSION} \
     gremlinserver.threadPoolWorker=1 \
     gremlinserver.gremlinPool=8
 
-RUN groupadd -r janusgraph --gid=999 && \
-    useradd -r -g janusgraph --uid=999 -d ${JANUS_DATA_DIR} janusgraph && \
-    apt-get update -y && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends krb5-user && \
-    rm -rf /var/lib/apt/lists/*
+RUN addgroup -S janusgraph -g 1000 && \
+    adduser -S -G janusgraph -u 1000 janusgraph -h ${JANUS_DATA_DIR} && \
+    apk update --no-cache && \
+    apk add bash krb5
 
 COPY --from=builder /opt/janusgraph/ /opt/janusgraph/
 COPY --from=builder /opt/yq /usr/bin/yq
