@@ -38,7 +38,7 @@ for v in "${versions[@]}"; do
     full_version_with_revision="${full_version}-${REVISION}"
 
     # build and test image
-    docker build -f "${v}/Dockerfile" -t "${IMAGE_NAME}:${full_version}" ${v} --build-arg REVISION="$REVISION" --build-arg CREATED="$CREATED"
+    docker buildx build --platform linux/amd64,linux/arm64 -f "${v}/Dockerfile" -t "${IMAGE_NAME}:${full_version}" ${v} --build-arg REVISION="$REVISION" --build-arg CREATED="$CREATED" --push
     ./test-image.sh "${IMAGE_NAME}:${full_version}"
 
     # add relevant tags
