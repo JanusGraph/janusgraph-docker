@@ -3,7 +3,8 @@
 ## Building
 
 The `build-images.sh` script will build the docker images for all the Dockerfiles in the versioned
-folder directories.
+folder directories using `buildx` command for multi-plaform.
+See [Docker Buildx](https://docs.docker.com/buildx/working-with-buildx) for more.
 
 ```bash
 ./build-images.sh

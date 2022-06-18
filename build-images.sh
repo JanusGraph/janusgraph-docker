@@ -25,6 +25,7 @@ latest_version="${versions[${#versions[@]}-1]}"
 
 REVISION="$(git rev-parse --short HEAD)"
 CREATED="$(date -u +”%Y-%m-%dT%H:%M:%SZ”)"
+PLATFORMS="linux/amd64,linux/arm64"
 IMAGE_NAME="docker.io/janusgraph/janusgraph"
 
 echo "REVISION: ${REVISION}"
@@ -34,11 +35,11 @@ echo "IMAGE_NAME: ${IMAGE_NAME}"
 for v in "${versions[@]}"; do
   if [ -z "${version}" ] || [ "${version}" == "${v}" ]; then
     # prepare docker tags
-    full_version="$(grep "ARG JANUS_VERSION" ${v}/Dockerfile | head -n 1 | cut -d"=" -f 2)"
+    full_version="$(grep "ARG JANUS_VERSION" "${v}/Dockerfile" | head -n 1 | cut -d"=" -f 2)"
     full_version_with_revision="${full_version}-${REVISION}"
 
     # build and test image
-    docker build -f "${v}/Dockerfile" -t "${IMAGE_NAME}:${full_version}" ${v} --build-arg REVISION="$REVISION" --build-arg CREATED="$CREATED"
+    docker buildx build --platform "${PLATFORMS}" -f "${v}/Dockerfile" -t "${IMAGE_NAME}:${full_version}" "${v}" --build-arg REVISION="$REVISION" --build-arg CREATED="$CREATED"
     ./test-image.sh "${IMAGE_NAME}:${full_version}"
 
     # add relevant tags

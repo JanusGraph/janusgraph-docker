@@ -26,6 +26,12 @@ jobs:
         version: ["0.5", "0.6"]
     steps:
     - uses: actions/checkout@v2
+    # https://github.com/docker/setup-qemu-action
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v2
+    # https://github.com/docker/setup-buildx-action
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
     - name: build images
       run: ./build-images.sh ${{ matrix.version }}
     - name: Run Trivy vulnerability scanner
