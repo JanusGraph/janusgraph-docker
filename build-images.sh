@@ -20,8 +20,24 @@ set -eu
 version="${1:-}"
 # get all versions
 versions=($(ls -d [0-9]*))
+
+get_full_version () {
+  echo "$(grep "ARG JANUS_VERSION" $1/Dockerfile | head -n 1 | cut -d"=" -f 2)"
+}
+
+get_latest_version () {
+  for v in "${versions[@]}"; do
+    full_version=$(get_full_version $v)
+    if [[ $full_version != *"-"* ]]; then
+      latest_version="${v}"
+    fi
+  done
+  echo $latest_version
+}
+
 # get the last element of sorted version folders
-latest_version="${versions[${#versions[@]}-1]}"
+latest_version=$(get_latest_version)
+echo "latest_version: ${latest_version}"
 
 REVISION="$(git rev-parse --short HEAD)"
 CREATED="$(date -u +”%Y-%m-%dT%H:%M:%SZ”)"
@@ -34,21 +50,23 @@ echo "IMAGE_NAME: ${IMAGE_NAME}"
 for v in "${versions[@]}"; do
   if [ -z "${version}" ] || [ "${version}" == "${v}" ]; then
     # prepare docker tags
-    full_version="$(grep "ARG JANUS_VERSION" ${v}/Dockerfile | head -n 1 | cut -d"=" -f 2)"
+    full_version=$(get_full_version $v)
     full_version_with_revision="${full_version}-${REVISION}"
 
     # build and test image
     docker build -f "${v}/Dockerfile" -t "${IMAGE_NAME}:${full_version}" ${v} --build-arg REVISION="$REVISION" --build-arg CREATED="$CREATED"
     ./test-image.sh "${IMAGE_NAME}:${full_version}"
 
-    # add relevant tags
-    docker tag "${IMAGE_NAME}:${full_version}" "${IMAGE_NAME}:${v}"
-    echo "Successfully tagged ${IMAGE_NAME}:${v}"
-    docker tag "${IMAGE_NAME}:${full_version}" "${IMAGE_NAME}:${full_version_with_revision}"
-    echo "Successfully tagged ${IMAGE_NAME}:${full_version_with_revision}"
-    if [ "${v}" == "${latest_version}" ]; then
-      docker tag "${IMAGE_NAME}:${v}" "${IMAGE_NAME}:latest"
-      echo "Successfully tagged ${IMAGE_NAME}:latest"
+    # add relevant tags if the version is for a stable release
+    if [[ $full_version != *"-"* ]]; then
+      docker tag "${IMAGE_NAME}:${full_version}" "${IMAGE_NAME}:${v}"
+      echo "Successfully tagged ${IMAGE_NAME}:${v}"
+      docker tag "${IMAGE_NAME}:${full_version}" "${IMAGE_NAME}:${full_version_with_revision}"
+      echo "Successfully tagged ${IMAGE_NAME}:${full_version_with_revision}"
+      if [ "${v}" == "${latest_version}" ]; then
+        docker tag "${IMAGE_NAME}:${v}" "${IMAGE_NAME}:latest"
+        echo "Successfully tagged ${IMAGE_NAME}:latest"
+      fi
     fi
   fi
 done

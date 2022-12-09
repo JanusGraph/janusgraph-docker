@@ -288,7 +288,7 @@ janusgraph-mount | chown: changing ownership of '/etc/opt/janusgraph/janusgraph.
 
 The user is created with uid 999 and gid 999 and user's a home dir is `/var/lib/janusgraph`. 
 
-Folloing folder are created with these user rights:
+Following folder are created with these user rights:
 * `/var/lib/janusgraph`
 * `/etc/opt/janusgraph`
 * `/opt/janusgraph`

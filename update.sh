@@ -55,7 +55,7 @@ for version in "${versions[@]}"; do
     # given versioned directory, query GitHub API for latest version
     major_minor_version="$version"
     url=https://api.github.com/repos/janusgraph/janusgraph/tags
-    filter='[.[].name|select(test("v'${version}'.[0-9]+$"))|ltrimstr("v")][0]'
+    filter='[.[].name|select(test("v'${version}'.[0-9]+[\\-a-z0-9]*$"))|ltrimstr("v")][0]'
     latest_version=$(curl -s "$url" | jq ''$filter'' | tr -d '"')
     if [ ${latest_version} == "null" ]; then
       echo "Version not found"
@@ -67,11 +67,18 @@ for version in "${versions[@]}"; do
   echo "$version/$latest_version"
   mkdir -p $dir/conf $dir/scripts
 
+  # determine JDK version to use
+  if [[ $version =~ ^0\..* ]]; then
+    jdk_version=8
+  else
+    jdk_version=11
+  fi
+
   # copy Dockerfile and update version
   template-generated-warning "#" > "$dir/Dockerfile"
   sed -e 's!^\(ARG JANUS_VERSION\)\s*=.*!\1='"${latest_version}"'!' \
     -e 's!{MAJOR_MINOR_VERSION_PLACEHOLDER}!'"${major_minor_version}"'!' \
-    build/Dockerfile-openjdk8.template >> "$dir/Dockerfile"
+    build/Dockerfile-openjdk${jdk_version}.template >> "$dir/Dockerfile"
 
   # copy docker-entrypoint
   head -n 1 build/docker-entrypoint.sh > $dir/docker-entrypoint.sh
@@ -91,6 +98,5 @@ for version in "${versions[@]}"; do
   copy-with-template-generated-warning conf/janusgraph-cql-es-server.properties "#"
   copy-with-template-generated-warning conf/janusgraph-cql-server.properties "#"
   copy-with-template-generated-warning conf/janusgraph-inmemory-server.properties "#"
-  copy-with-template-generated-warning conf/log4j-server.properties "#"
   copy-with-template-generated-warning scripts/remote-connect.groovy "//"
 done

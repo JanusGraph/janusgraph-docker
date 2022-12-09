@@ -7,3 +7,5 @@
 * Set /var/lib/janusgraph as home dir for user janusgraph #84
 * Include default assets into repo #85
 * Upgrade JanusGraph to 0.6 #91
+* Add image for JanusGraph 1.0, currently only for the release candidate #111
+* Use Java 11 for all versions 1.0 and higher #111
