@@ -57,9 +57,8 @@ for v in "${versions[@]}"; do
     docker build -f "${v}/Dockerfile" -t "${IMAGE_NAME}:${full_version}" ${v} --build-arg REVISION="$REVISION" --build-arg CREATED="$CREATED"
     ./test-image.sh "${IMAGE_NAME}:${full_version}"
 
-    # add relevant tags if the version is for a stable release
-    if [[ $full_version != *"-"* ]]; then
-      docker tag "${IMAGE_NAME}:${full_version}" "${IMAGE_NAME}:${v}"
+    # add relevant tags
+    docker tag "${IMAGE_NAME}:${full_version}" "${IMAGE_NAME}:${v}"
       echo "Successfully tagged ${IMAGE_NAME}:${v}"
       docker tag "${IMAGE_NAME}:${full_version}" "${IMAGE_NAME}:${full_version_with_revision}"
       echo "Successfully tagged ${IMAGE_NAME}:${full_version_with_revision}"
@@ -67,6 +66,5 @@ for v in "${versions[@]}"; do
         docker tag "${IMAGE_NAME}:${v}" "${IMAGE_NAME}:latest"
         echo "Successfully tagged ${IMAGE_NAME}:latest"
       fi
-    fi
   fi
 done

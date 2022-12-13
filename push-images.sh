@@ -54,9 +54,9 @@ for v in "${versions[@]}"; do
     # push relevant tags
     echo "docker push \"${IMAGE_NAME}:${full_version}\""
     docker push "${IMAGE_NAME}:${full_version}"
+    docker push "${IMAGE_NAME}:${full_version_with_revision}"
     if [[ $full_version != *"-"* ]]; then
       docker push "${IMAGE_NAME}:${v}"
-      docker push "${IMAGE_NAME}:${full_version_with_revision}"
       if [ "${v}" == "${latest_version}" ]; then
         docker push "${IMAGE_NAME}:latest"
       fi
