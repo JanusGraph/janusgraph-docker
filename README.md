@@ -330,7 +330,7 @@ license](APACHE-2.0.txt) and documentation is provided under the [CC-BY-4.0
 license](CC-BY-4.0.txt). For details about this dual-license structure, please
 see [`LICENSE.txt`](LICENSE.txt).
 
-[actions-badge]: https://img.shields.io/github/workflow/status/JanusGraph/janusgraph-docker/Deploy%20Images
+[actions-badge]: https://img.shields.io/github/actions/workflow/status/JanusGraph/janusgraph-docker/docker.yml?branch=master
 [actions-url]: https://github.com/JanusGraph/janusgraph-docker/actions
 [docker-pulls-img]: https://img.shields.io/docker/pulls/janusgraph/janusgraph.svg
 [docker-hub-url]: https://hub.docker.com/r/janusgraph/janusgraph
