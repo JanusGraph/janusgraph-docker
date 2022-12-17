@@ -40,7 +40,7 @@ latest_version=$(get_latest_version)
 echo "latest_version: ${latest_version}"
 
 REVISION="$(git rev-parse --short HEAD)"
-CREATED="$(date -u +”%Y-%m-%dT%H:%M:%SZ”)"
+CREATED="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 IMAGE_NAME="docker.io/janusgraph/janusgraph"
 
 echo "REVISION: ${REVISION}"
