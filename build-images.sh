@@ -24,7 +24,7 @@ versions=($(ls -d [0-9]*))
 latest_version="${versions[${#versions[@]}-1]}"
 
 REVISION="$(git rev-parse --short HEAD)"
-CREATED="$(date -u +”%Y-%m-%dT%H:%M:%SZ”)"
+CREATED="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 IMAGE_NAME="docker.io/janusgraph/janusgraph"
 
 echo "REVISION: ${REVISION}"
