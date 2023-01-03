@@ -40,9 +40,12 @@ latest_version=$(get_latest_version)
 echo "latest_version: ${latest_version}"
 
 REVISION="$(git rev-parse --short HEAD)"
+CREATED="$(date -u +”%Y-%m-%dT%H:%M:%SZ”)"
 IMAGE_NAME="docker.io/janusgraph/janusgraph"
+PLATFORMS="linux/amd64,linux/arm64"
 
 echo "REVISION: ${REVISION}"
+echo "CREATED: ${CREATED}"
 echo "IMAGE_NAME: ${IMAGE_NAME}"
 
 for v in "${versions[@]}"; do
@@ -51,15 +54,38 @@ for v in "${versions[@]}"; do
     full_version=$(get_full_version $v)
     full_version_with_revision="${full_version}-${REVISION}"
 
-    # push relevant tags
-    echo "docker push \"${IMAGE_NAME}:${full_version}\""
-    docker push "${IMAGE_NAME}:${full_version}"
-    docker push "${IMAGE_NAME}:${full_version_with_revision}"
+    # build and push the multi-arch image
+    # unfortunately, when building a multi-arch image, we have to push it right after building it,
+    # rather than save locally and then push it. see https://github.com/docker/buildx/issues/166
     if [[ $full_version != *"-"* ]]; then
-      docker push "${IMAGE_NAME}:${v}"
       if [ "${v}" == "${latest_version}" ]; then
-        docker push "${IMAGE_NAME}:latest"
+        docker buildx build ${v}\
+          --platform "${PLATFORMS}" -f "${v}/Dockerfile" \
+          -t "${IMAGE_NAME}:${full_version}" \
+          -t "${IMAGE_NAME}:${v}" \
+          -t "${IMAGE_NAME}:${full_version_with_revision}" \
+          -t "${IMAGE_NAME}:latest" \
+          --build-arg REVISION="$REVISION" \
+          --build-arg CREATED="$CREATED" \
+          --push
+      else
+        docker buildx build ${v}\
+          --platform "${PLATFORMS}" -f "${v}/Dockerfile" \
+          -t "${IMAGE_NAME}:${full_version}" \
+          -t "${IMAGE_NAME}:${v}" \
+          -t "${IMAGE_NAME}:${full_version_with_revision}" \
+          --build-arg REVISION="$REVISION" \
+          --build-arg CREATED="$CREATED" \
+          --push
       fi
+    else
+      docker buildx build ${v}\
+        --platform "${PLATFORMS}" -f "${v}/Dockerfile" \
+        -t "${IMAGE_NAME}:${full_version}" \
+        -t "${IMAGE_NAME}:${full_version_with_revision}" \
+        --build-arg REVISION="$REVISION" \
+        --build-arg CREATED="$CREATED" \
+        --push
     fi
   fi
 done
