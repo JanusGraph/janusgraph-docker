@@ -45,7 +45,7 @@ RUN apt update -y && apt install -y gpg unzip curl && \
 COPY conf/ ${JANUS_HOME}/conf/
 COPY scripts/remote-connect.groovy ${JANUS_HOME}/scripts/
 
-FROM openjdk:11-jre-slim-buster
+FROM eclipse-temurin:11-jdk
 
 ARG CREATED=test
 ARG REVISION=test
