@@ -16,6 +16,8 @@ name: Build Images
 
 on:
   push:
+    branches-ignore:
+      - 'dependabot/**'
   pull_request:
 
 jobs:
