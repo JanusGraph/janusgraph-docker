@@ -47,6 +47,9 @@ echo "REVISION: ${REVISION}"
 echo "CREATED: ${CREATED}"
 echo "IMAGE_NAME: ${IMAGE_NAME}"
 
+# enable buildkit
+export DOCKER_BUILDKIT=1
+
 for v in "${versions[@]}"; do
   if [ -z "${version}" ] || [ "${version}" == "${v}" ]; then
     # prepare docker tags
