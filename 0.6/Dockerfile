@@ -19,7 +19,7 @@
 FROM debian:buster-slim as builder
 
 ARG TARGETARCH
-ARG JANUS_VERSION=0.6.2
+ARG JANUS_VERSION=0.6.3
 ARG YQ_VERSION=3.4.1
 
 ENV JANUS_VERSION=${JANUS_VERSION} \
@@ -46,11 +46,11 @@ RUN apt update -y && apt install -y gpg unzip curl && \
 COPY conf/ ${JANUS_HOME}/conf/
 COPY scripts/remote-connect.groovy ${JANUS_HOME}/scripts/
 
-FROM eclipse-temurin:8-jdk
+FROM eclipse-temurin:8-jre
 
 ARG CREATED=test
 ARG REVISION=test
-ARG JANUS_VERSION=0.6.2
+ARG JANUS_VERSION=0.6.3
 
 ENV JANUS_VERSION=${JANUS_VERSION} \
     JANUS_HOME=/opt/janusgraph \
