@@ -300,10 +300,10 @@ Here's the policy we follow for tagging our Docker images:
 
 | Tag            | Support level | Docker base image      |
 |:--------------|:-------------|------------------------|
-| latest         | <ul><li>latest JanusGraph release</li><li>no breaking changes guarantees</li></ul> | eclipse-temurin:11-jdk |
-| x.x            | <ul><li>newest patch-level version of JanusGraph</li><li>expect breaking changes</li></ul> | eclipse-temurin:8-jdk  |
-| x.x.x          | <ul><li>defined JanusGraph version</li><li>breaking changes are only in this repo</li></ul> | eclipse-temurin:8-jdk  |
-| x.x.x-revision | <ul><li>defined JanusGraph version</li><li>defined commit in JanusGraph-docker repo</li></ul> | eclipse-temurin:8-jdk  |
+| latest         | <ul><li>latest JanusGraph release</li><li>no breaking changes guarantees</li></ul> | eclipse-temurin:11-jre |
+| x.x            | <ul><li>newest patch-level version of JanusGraph</li><li>expect breaking changes</li></ul> | eclipse-temurin:8-jre  |
+| x.x.x          | <ul><li>defined JanusGraph version</li><li>breaking changes are only in this repo</li></ul> | eclipse-temurin:8-jre  |
+| x.x.x-revision | <ul><li>defined JanusGraph version</li><li>defined commit in JanusGraph-docker repo</li></ul> | eclipse-temurin:8-jre  |
 
 We collect a list of changes in our docker images build process in our [CHANGELOG.md](./CHANGELOG.md)
 
