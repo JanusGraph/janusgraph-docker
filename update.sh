@@ -91,7 +91,6 @@ for version in "${versions[@]}"; do
   awk 'NR>1' build/load-initdb.sh >> $dir/load-initdb.sh
 
   # copy resources
-  copy-with-template-generated-warning conf/janusgraph-server.yaml "#"
   copy-with-template-generated-warning conf/janusgraph-berkeleyje-es-server.properties "#"
   copy-with-template-generated-warning conf/janusgraph-berkeleyje-lucene-server.properties "#"
   copy-with-template-generated-warning conf/janusgraph-berkeleyje-server.properties "#"
