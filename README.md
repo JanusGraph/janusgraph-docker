@@ -1,3 +1,5 @@
+> **Warning:** The Docker images are in the process to move back into main repo. Please open new issues and PRs in [the main repo](https://github.com/JanusGraph/janusgraph).
+
 # JanusGraph Docker images
 
 [![GitHub Workflow Status][actions-badge]][actions-url]
