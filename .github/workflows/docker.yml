@@ -27,7 +27,7 @@ jobs:
       matrix:
         version: ["0.5", "0.6", "1.0"]
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: build images
       run: ./build-images.sh ${{ matrix.version }}
     - name: Run Trivy vulnerability scanner
